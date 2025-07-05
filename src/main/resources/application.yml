@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /bus
+
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/busbooking"
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  signerKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
+  valid-duration: 3600 # in second
+  refreshable-duration: 36000 # in seconds
+
+open:
+  api:
+    title: API document
+    version: v1.0.0
+    description: Mota API service
+    serverUrl: http://localhost:8080
+    serverName: server test
