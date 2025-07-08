@@ -12,23 +12,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "bustrip")
-public class BusTrip {
+@Table(name = "driver")
+public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @ManyToOne
-    @JoinColumn(name = "idBusRoute")
-    BusRoute busRoute;
-    LocalDateTime departureTime;
-    int price;
-    @ManyToOne
-    @JoinColumn(name = "idBus")
-    Bus bus;
-    @ManyToOne
-    @JoinColumn(name = "idDriver")
-    Driver driver;
-    int status;
+    String name;
+    String cccd;
+    String phone;
+    String avatar;
+    int gender;
+    LocalDateTime birthDate;
     @Column(name = "createdAt")
     LocalDateTime createdAt;
     @Column(name = "updatedAt")

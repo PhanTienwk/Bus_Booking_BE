@@ -1,4 +1,4 @@
-package com.thuctap.busbooking.dto.request;
+package com.thuctap.busbooking.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

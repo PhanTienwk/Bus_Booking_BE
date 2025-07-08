@@ -11,7 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.thuctap.busbooking.dto.request.ApiResponse;
+import com.thuctap.busbooking.dto.response.ApiResponse;
 
 import lombok.extern.slf4j.Slf4j;
 

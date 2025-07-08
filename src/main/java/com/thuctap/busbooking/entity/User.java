@@ -20,6 +20,7 @@ public class User {
     String name;
     String cccd;
     String phone;
+    int gender;
     LocalDateTime birthDate;
     @OneToOne
     @JoinColumn(name = "idAccount")
