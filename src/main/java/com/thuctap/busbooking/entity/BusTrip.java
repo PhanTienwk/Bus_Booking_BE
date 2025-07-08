@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,4 +35,9 @@ public class BusTrip {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "busTrip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ChangeHistoryTicket> changeHistoryTickets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "busTrip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Invoice> invoices = new ArrayList<>();
 }
