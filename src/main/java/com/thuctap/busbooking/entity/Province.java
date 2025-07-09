@@ -26,6 +26,4 @@ public class Province {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BusStation> busStations = new ArrayList<>();
 }

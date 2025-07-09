@@ -31,6 +31,4 @@ public class Ticket {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChangeHistoryTicket> changeHistoryTickets = new ArrayList<>();
 }

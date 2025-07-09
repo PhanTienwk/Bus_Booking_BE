@@ -21,6 +21,7 @@ public class User {
     int id;
     String name;
     String cccd;
+    String avatar;
     String phone;
     int gender;
     LocalDateTime birthDate;
@@ -31,6 +32,4 @@ public class User {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Invoice> invoices = new ArrayList<>();
 }

@@ -28,9 +28,4 @@ public class Bus {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "bus", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BusTrip> busTrips = new ArrayList<>();
-
-    @OneToMany(mappedBy = "bus", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SeatPosition> seatPositions = new ArrayList<>();
 }

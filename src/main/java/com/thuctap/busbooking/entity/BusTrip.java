@@ -23,21 +23,18 @@ public class BusTrip {
     @JoinColumn(name = "idBusRoute")
     BusRoute busRoute;
     LocalDateTime departureTime;
+    float costOperating ;
+    float costIncurred;
     int price;
     @ManyToOne
     @JoinColumn(name = "idBus")
     Bus bus;
     @ManyToOne
     @JoinColumn(name = "idDriver")
-    Driver driver;
+    User user;
     int status;
     @Column(name = "createdAt")
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "busTrip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChangeHistoryTicket> changeHistoryTickets = new ArrayList<>();
-
-    @OneToMany(mappedBy = "busTrip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Invoice> invoices = new ArrayList<>();
 }

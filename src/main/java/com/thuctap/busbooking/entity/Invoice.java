@@ -37,6 +37,4 @@ public class Invoice {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Ticket> tickets = new ArrayList<>();
 }

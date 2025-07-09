@@ -28,9 +28,4 @@ public class SeatPosition {
     LocalDateTime createdAt;
     @Column(name = "updatedAt")
     LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "seatPosition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChangeHistoryTicket> changeHistoryTickets = new ArrayList<>();
-
-    @OneToMany(mappedBy = "seatPosition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Ticket> tickets = new ArrayList<>();
 }
