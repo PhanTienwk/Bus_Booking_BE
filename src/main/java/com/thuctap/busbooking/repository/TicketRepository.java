@@ -1,9 +1,9 @@
 package com.thuctap.busbooking.repository;
 
-import com.thuctap.busbooking.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.thuctap.busbooking.entity.Ticket;
+
 @Repository
-public interface TicketRepository extends JpaRepository<Ticket,Integer> {
-}
+public interface TicketRepository extends JpaRepository<Ticket, Integer> {}

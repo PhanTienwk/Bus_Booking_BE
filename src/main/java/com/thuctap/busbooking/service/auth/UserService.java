@@ -1,4 +1,3 @@
 package com.thuctap.busbooking.service.auth;
 
-public interface UserService {
-}
+public interface UserService {}
