@@ -1,14 +1,11 @@
 package com.thuctap.busbooking.controller;
 
 import com.thuctap.busbooking.dto.response.ApiResponse;
-import com.thuctap.busbooking.entity.Account;
+import com.thuctap.busbooking.dto.response.BusStationAddResponse;
+import com.thuctap.busbooking.dto.response.BusStationUpdateResponse;
 import com.thuctap.busbooking.entity.BusStation;
-import com.thuctap.busbooking.service.auth.BusStationService;
-import com.thuctap.busbooking.service.impl.AccountServiceImpl;
 import com.thuctap.busbooking.service.impl.BusStationServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/bus-station")
+
 public class BusStationController {
     BusStationServiceImpl busStationService;
 
  
-    @GetMapping
+    @GetMapping("/bus-station")
     public ApiResponse<List<BusStation>> getAllBusStation() {
         return ApiResponse.<List<BusStation>>builder()
                 .result(busStationService.getAllBusSTT())
@@ -34,4 +31,20 @@ public class BusStationController {
                 .build();
     }
 
+    @PutMapping("/update-bus-station")
+    public ApiResponse<Boolean> updateBusStation(@RequestBody BusStationUpdateResponse request) {
+
+        return ApiResponse.<Boolean>builder()
+                .result(busStationService.updateBusStation(request))
+                .message("Cập nhật bến xe thành công")
+                .build();
+    }
+
+    @PostMapping("/add-new-bus-station")
+    public ApiResponse<BusStation> addBusStation(@RequestBody BusStationAddResponse request) {
+        return ApiResponse.<BusStation>builder()
+                .result(busStationService.addBusStation(request))
+                .message("Thêm bến xe thành công")
+                .build();
+    }
 }
