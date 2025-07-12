@@ -61,4 +61,11 @@ public class BusStationController {
                 .message("Lọc danh sách bến xe thành công")
                 .build();
     }
+    @PutMapping("/update-bus-station-status")
+    public ApiResponse<Boolean> updateBusStationStatus(@RequestParam Integer id, @RequestParam Integer status) {
+        return ApiResponse.<Boolean>builder()
+                .result(busStationService.updateBusStationStatus(id, status))
+                .message("Cập nhật trạng thái bến xe thành công")
+                .build();
+    }
 }

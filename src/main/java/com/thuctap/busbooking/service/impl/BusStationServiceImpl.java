@@ -73,4 +73,16 @@ public class BusStationServiceImpl implements BusStationService {
         Specification<BusStation> spec = FilterBusStation.filterBusStation(id, name, address, phone, provinceId, status);
         return BusSTTRepo.findAll(spec);
     }
+    public Boolean updateBusStationStatus(Integer id, Integer status) {
+        BusStation busStation = BusSTTRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy bến xe với id: " + id));
+
+        if (status != 0 && status != 1) {
+            throw new IllegalArgumentException("Trạng thái phải là 0 hoặc 1");
+        }
+
+        busStation.setStatus(status);
+        busStation.setUpdatedAt(LocalDateTime.now());
+        return BusSTTRepo.save(busStation) != null;
+    }
 }
