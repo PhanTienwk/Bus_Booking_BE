@@ -1,3 +1,10 @@
 package com.thuctap.busbooking.service.auth;
 
-public interface ProvinceService {}
+import com.thuctap.busbooking.entity.Province;
+import com.thuctap.busbooking.entity.Ticket;
+
+import java.util.List;
+
+public interface ProvinceService {
+    List<Province> getAllProvinces();
+}

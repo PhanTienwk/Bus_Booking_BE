@@ -33,7 +33,7 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("user/{id}")
     public ApiResponse<User> getUserById(@PathVariable int id) {
         return ApiResponse.<User>builder()
                 .result(userService.getUserById(id))
