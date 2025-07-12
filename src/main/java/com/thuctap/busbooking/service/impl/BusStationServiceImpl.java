@@ -1,11 +1,13 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.SpecificationQuery.FilterBusStation;
 import com.thuctap.busbooking.dto.response.BusStationAddResponse;
 import com.thuctap.busbooking.dto.response.BusStationUpdateResponse;
 import com.thuctap.busbooking.entity.BusStation;
 import com.thuctap.busbooking.entity.Province;
 import com.thuctap.busbooking.repository.BusStationRepository;
 import com.thuctap.busbooking.repository.ProvinceRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.BusStationService;
@@ -64,5 +66,11 @@ public class BusStationServiceImpl implements BusStationService {
                 .build();
 
         return BusSTTRepo.save(busStation);
+    }
+
+
+    public List<BusStation> filterBusStations(Integer id, String name, String address, String phone, Integer provinceId, Integer status) {
+        Specification<BusStation> spec = FilterBusStation.filterBusStation(id, name, address, phone, provinceId, status);
+        return BusSTTRepo.findAll(spec);
     }
 }
