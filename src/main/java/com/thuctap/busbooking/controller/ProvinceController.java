@@ -32,4 +32,12 @@ public class ProvinceController {
                 .message("Lấy danh sách tỉnh thành thành công")
                 .build();
     }
+
+    @GetMapping("/get-all-province")
+    public ApiResponse<List<Province>> getAllProvince() {
+        return ApiResponse.<List<Province>>builder()
+                .result(provinceService.getAllProvince())
+                .message("Lấy danh sách thành phố")
+                .build();
+    }
 }

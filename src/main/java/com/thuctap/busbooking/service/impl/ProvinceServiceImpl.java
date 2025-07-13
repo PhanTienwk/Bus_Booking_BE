@@ -4,6 +4,10 @@ import com.thuctap.busbooking.entity.Province;
 import com.thuctap.busbooking.entity.Ticket;
 import com.thuctap.busbooking.repository.ProvinceRepository;
 import com.thuctap.busbooking.repository.TicketRepository;
+import com.thuctap.busbooking.entity.BusStation;
+import com.thuctap.busbooking.entity.Province;
+import com.thuctap.busbooking.repository.BusStationRepository;
+import com.thuctap.busbooking.repository.ProvinceRepository;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.ProvinceService;
@@ -23,8 +27,11 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     ProvinceRepository provinceRepository;
 
-    @Override
     public List<Province> getAllProvinces() {
+        return provinceRepository.findAll();
+    }
+
+    public List<Province> getAllProvince() {
         return provinceRepository.findAll();
     }
 }

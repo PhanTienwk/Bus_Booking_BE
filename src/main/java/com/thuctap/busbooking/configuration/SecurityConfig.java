@@ -3,6 +3,7 @@ package com.thuctap.busbooking.configuration;
 import com.thuctap.busbooking.security.jwt.JwtAuthenticationFilter;
 import com.thuctap.busbooking.security.jwt.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,7 +45,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request
+        httpSecurity.cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> request
 
 //                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
                 .anyRequest()
@@ -62,7 +65,11 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
+<<<<<<< HEAD
 
+=======
+        corsConfiguration.setAllowCredentials(true);
+>>>>>>> f136ffa5e22320d5fe6410a5241bee642f6efc97
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
