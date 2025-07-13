@@ -10,4 +10,6 @@ public interface BusStationService {
     public List<BusStation> getAllBusSTT();
     public Boolean updateBusStation(BusStationUpdateResponse request);
     public BusStation addBusStation(BusStationAddResponse request);
+    public List<BusStation> filterBusStations(Integer id, String name, String address, String phone, Integer provinceId, Integer status);
+    public Boolean updateBusStationStatus(Integer id, Integer status);
 }

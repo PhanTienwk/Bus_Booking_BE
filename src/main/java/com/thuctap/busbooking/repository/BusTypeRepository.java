@@ -6,4 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.thuctap.busbooking.entity.BusType;
 
 @Repository
-public interface BysTypeRepository extends JpaRepository<BusType, Integer> {}
+public interface BusTypeRepository extends JpaRepository<BusType, Integer> {}
