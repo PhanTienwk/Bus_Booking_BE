@@ -1,13 +1,13 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.BusRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusStation;
 import com.thuctap.busbooking.entity.BusType;
 import com.thuctap.busbooking.service.auth.BusService;
 import com.thuctap.busbooking.service.auth.BusTypeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +40,44 @@ public class BusController {
                 .message("Lấy danh sách xe thành công")
                 .build();
     }
+
+    @PostMapping("/add-bus")
+    public ApiResponse<Bus> addBus(@RequestBody BusRequest busRequest) {
+        Bus bus = busService.addBus(busRequest);
+        return ApiResponse.<Bus>builder()
+                .result(bus)
+                .message("Thêm xe thành công")
+                .code(1000)
+                .build();
+    }
+
+    @PutMapping("/update-bus/{id}")
+    public ApiResponse<Bus> updateBus(@PathVariable int id, @RequestBody BusRequest busRequest) {
+        Bus bus = busService.updateBus(id, busRequest);
+        return ApiResponse.<Bus>builder()
+                .result(bus)
+                .message("Cập nhật xe thành công")
+                .code(1000)
+                .build();
+    }
+
+    @PutMapping("/update-bus-status/{id}")
+    public ApiResponse<Bus> updateBusStatus(@PathVariable int id, @RequestParam int status) {
+        Bus bus = busService.updateBusStatus(id, status);
+        return ApiResponse.<Bus>builder()
+                .result(bus)
+                .message("Cập nhật trạng thái xe thành công")
+                .code(1000)
+                .build();
+    }
+
+//    @PostMapping("/filter-buses")
+//    public ApiResponse<List<Bus>> filterBuses(@RequestBody BusRequest filterRequest) {
+//        List<Bus> buses = busService.filterBuses(filterRequest);
+//        return ApiResponse.<List<Bus>>builder()
+//                .result(buses)
+//                .message("Lọc xe thành công")
+//                .code(1000)
+//                .build();
+//    }
 }
