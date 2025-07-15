@@ -1,5 +1,7 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.SpecificationQuery.FilterBus;
+import com.thuctap.busbooking.dto.request.BusFilterRequest;
 import com.thuctap.busbooking.dto.request.BusRequest;
 import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusStation;
@@ -7,6 +9,7 @@ import com.thuctap.busbooking.entity.BusType;
 import com.thuctap.busbooking.repository.BusRepository;
 import com.thuctap.busbooking.repository.BusStationRepository;
 import com.thuctap.busbooking.repository.BusTypeRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.BusService;
@@ -78,25 +81,12 @@ public class BusServiceImpl implements BusService {
         return busRepo.save(bus);
     }
 
-
-//    public List<Bus> filterBuses(BusRequest filterRequest) {
-//        List<Bus> buses = busRepo.findAll();
-//        if (filterRequest.getBusTypeIdAdd() != null) {
-//            buses = buses.stream()
-//                    .filter(bus -> bus.getBusType().getId().equals(filterRequest.getBusTypeIdAdd()))
-//                    .collect(Collectors.toList());
-//        }
-//        if (filterRequest.getNameAdd() != null && !filterRequest.getNameAdd().isEmpty()) {
-//            buses = buses.stream()
-//                    .filter(bus -> bus.getName().toLowerCase().contains(filterRequest.getNameAdd().toLowerCase()))
-//                    .collect(Collectors.toList());
-//        }
-//        if (filterRequest.getStatusAdd() != null) {
-//            int status = filterRequest.getStatusAdd() ? 1 : 0;
-//            buses = buses.stream()
-//                    .filter(bus -> bus.getStatus() == status)
-//                    .collect(Collectors.toList());
-//        }
-//        return buses;
-//    }
+    public List<Bus> filterBuses(BusFilterRequest filterRequest) {
+        return busRepo.findAll(FilterBus.filterBus(
+                filterRequest.getId(),
+                filterRequest.getNameAdd(),
+                filterRequest.getBusTypeIdAdd(),
+                filterRequest.getStatusAdd()
+        ));
+    }
 }

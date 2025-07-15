@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.auth;
 
+import com.thuctap.busbooking.dto.request.BusFilterRequest;
 import com.thuctap.busbooking.dto.request.BusRequest;
 import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusType;
@@ -12,5 +13,5 @@ public interface BusService {
     Bus addBus(BusRequest busRequest);
     Bus updateBus(int id, BusRequest busRequest);
     Bus updateBusStatus(int id, int status);
-    //List<Bus> filterBuses(BusRequest filterRequest);
+    public List<Bus> filterBuses(BusFilterRequest filterRequest);
 }
