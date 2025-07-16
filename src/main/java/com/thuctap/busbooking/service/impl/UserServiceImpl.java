@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.SpecificationQuery.FilterUser;
 import com.thuctap.busbooking.dto.request.UserRequest;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.User;
@@ -7,6 +8,7 @@ import com.thuctap.busbooking.repository.AccountRepository;
 import com.thuctap.busbooking.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.UserService;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllUsers();
     }
 
     @Override
@@ -78,4 +81,25 @@ public class UserServiceImpl implements UserService {
         account.setStatus(0);
         accountRepository.save(account);
     }
+
+    @Override
+    @Transactional
+    public void restoreUser(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+
+        Account account = user.getAccount();
+        if (account == null) {
+            throw new RuntimeException("Người dùng không có tài khoản liên kết");
+        }
+
+        account.setStatus(1);
+        accountRepository.save(account);
+    }
+
+    public List<User> filterUsers(String name, Integer gender, LocalDateTime birthday, String phone, String email, Integer status, Integer roleId) {
+        Specification<User> spec = FilterUser.filterUsers(name, gender, birthday, phone, email, status, roleId);
+        return userRepository.findAll(spec);
+    }
+
 }
