@@ -2,11 +2,13 @@ package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.dto.request.AccountCreationRequest;
 import com.thuctap.busbooking.entity.Account;
+import com.thuctap.busbooking.entity.Otp;
 import com.thuctap.busbooking.entity.Role;
 import com.thuctap.busbooking.exception.AppException;
 import com.thuctap.busbooking.exception.ErrorCode;
 import com.thuctap.busbooking.mapper.AccountMapper;
 import com.thuctap.busbooking.repository.AccountRepository;
+import com.thuctap.busbooking.repository.OtpRepository;
 import com.thuctap.busbooking.repository.RoleRepository;
 import com.thuctap.busbooking.service.auth.AccountService;
 import jakarta.mail.MessagingException;
@@ -20,6 +22,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
     JavaMailSender mailSender;
+    OtpRepository otpRepository;
+
+    private static final long OTP_TTL = 10;
 
     private Map<String, String> verificationCodes = new HashMap<>();
 
@@ -57,6 +63,12 @@ public class AccountServiceImpl implements AccountService {
             return "Email already exists!";
         }
         String code = generateVerificationCode();
+        Otp otp = Otp.builder()
+                .email(email)
+                .otp(code)
+                .expiresAt(LocalDateTime.now().plusMinutes(OTP_TTL))
+                .build();
+        otpRepository.save(otp);
         verificationCodes.put(email, code);
         sendEmail(email, code);
         return "Verification code sent to " + email;
@@ -93,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
                     + "<body>"
                     + "<div class=\"container\">"
                     + "<div class=\"header\">"
-                    + "<img src='https://via.placeholder.com/150' alt='BusBooking Logo' style='display:block;'>"
+//                    + "<img src='https://via.placeholder.com/150' alt='BusBooking Logo' style='display:block;'>"
                     + "<h2>Xác Thực Email Của Bạn</h2>"
                     + "</div>"
                     + "<div class=\"content\">"
@@ -118,11 +130,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public boolean verifyEmail(String email, String code) {
-        String storedCode = verificationCodes.get(email);
-        if (storedCode != null && storedCode.equals(code)) {
-            verificationCodes.remove(email);
-            return true;
-        }
-        return false;
+        return otpRepository.findByEmail(email)
+                .filter(otp -> otp.getExpiresAt().isAfter(LocalDateTime.now()))
+                .map(otp -> {
+                    if (otp.getOtp().equals(code)) {
+                        otpRepository.delete(otp);
+                        return true;
+                    }
+                    return false;
+                })
+                .orElse(false);
     }
 }

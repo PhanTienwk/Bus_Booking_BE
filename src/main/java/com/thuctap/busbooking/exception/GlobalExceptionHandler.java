@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
+
         log.error("Exception: ", exception);
         ApiResponse apiResponse = new ApiResponse();
 
