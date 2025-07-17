@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.UserFilterRequest;
 import com.thuctap.busbooking.dto.request.UserRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Account;
@@ -20,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/admin")
 public class UserController {
 
     UserServiceImpl userService;
@@ -62,6 +62,32 @@ public class UserController {
         userService.deleteUser(id);
         return ApiResponse.<Void>builder()
                 .message("Đã cập nhật trạng thái người dùng thành 'đã xóa'")
+                .build();
+    }
+
+    @PutMapping("/restore-user/{id}")
+    public ApiResponse<Void> restoreUser(@PathVariable int id) {
+        userService.restoreUser(id);
+        return ApiResponse.<Void>builder()
+                .message("Đã cập nhật trạng thái người dùng thành 'đang hoạt động'")
+                .build();
+    }
+
+    @PostMapping("/filter-user")
+    public ApiResponse<List<User>> filterUsers(@RequestBody UserFilterRequest request) {
+        List<User> filteredUsers = userService.filterUsers(
+                request.getName(),
+                request.getGender(),
+                request.getBirthday(),
+                request.getPhone(),
+                request.getEmail(),
+                request.getStatus(),
+                request.getRoleId()
+        );
+
+        return ApiResponse.<List<User>>builder()
+                .result(filteredUsers)
+                .message("Lọc danh sách người dùng thành công")
                 .build();
     }
 
