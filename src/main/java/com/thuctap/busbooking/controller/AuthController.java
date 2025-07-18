@@ -32,7 +32,6 @@ public class AuthController {
                 .result(authService.login(loginRequest))
                 .build();
     }
-
     @PostMapping("/register")
     public ApiResponse<?> register(@RequestBody RegisterRequest request) {
         String result = accountService.sendVerificationEmail(request.getEmail());
