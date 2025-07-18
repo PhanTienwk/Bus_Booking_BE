@@ -36,7 +36,6 @@ public class BusServiceImpl implements BusService {
         return busRepo.findAll();
     }
 
-
     public List<BusType> getAllBusType() {
         return busTypeRepo.findAll();
     }

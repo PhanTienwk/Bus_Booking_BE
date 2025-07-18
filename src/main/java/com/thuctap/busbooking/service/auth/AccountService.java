@@ -8,4 +8,5 @@ import java.util.List;
 public interface AccountService {
     List<Account> getAllAccount();
     Account createAccountUser(AccountCreationRequest request);
+    boolean verifyEmail(String email, String code);
 }
