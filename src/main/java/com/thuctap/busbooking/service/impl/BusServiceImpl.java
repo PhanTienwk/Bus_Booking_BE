@@ -3,8 +3,10 @@ package com.thuctap.busbooking.service.impl;
 import com.thuctap.busbooking.SpecificationQuery.FilterBus;
 import com.thuctap.busbooking.dto.request.BusFilterRequest;
 import com.thuctap.busbooking.dto.request.BusRequest;
+import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusStation;
+import com.thuctap.busbooking.entity.BusTrip;
 import com.thuctap.busbooking.entity.BusType;
 import com.thuctap.busbooking.repository.BusRepository;
 import com.thuctap.busbooking.repository.BusStationRepository;
@@ -89,4 +91,7 @@ public class BusServiceImpl implements BusService {
                 filterRequest.getStatusAdd()
         ));
     }
+
+
+
 }

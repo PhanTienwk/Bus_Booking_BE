@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.auth;
 
+import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
 import com.thuctap.busbooking.entity.BusRoute;
 import com.thuctap.busbooking.entity.BusTrip;
@@ -17,4 +18,5 @@ public interface BusTripService {
     public Boolean updateBusTripStatus(Integer id, Integer status);
     BusTrip addBusTrip(BusTripRequest request);
     BusTrip updateBusTrip(Integer id, BusTripRequest request);
+    List<BusTrip> filterBusTrips(BusTripFilterRequest request);
 }

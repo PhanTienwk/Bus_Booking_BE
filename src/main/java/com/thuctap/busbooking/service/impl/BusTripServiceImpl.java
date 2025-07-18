@@ -1,5 +1,7 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.SpecificationQuery.FilterBusTrip;
+import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
 import com.thuctap.busbooking.entity.*;
 import com.thuctap.busbooking.repository.*;
@@ -119,5 +121,16 @@ public class BusTripServiceImpl implements BusTripService {
         busTrip.setUpdatedAt(LocalDateTime.now());
 
         return busTripRepo.save(busTrip);
+    }
+
+    public List<BusTrip> filterBusTrips(BusTripFilterRequest request) {
+        return busTripRepo.findAll(FilterBusTrip.filterBusTrip(
+                request.getId(),
+                request.getBusRouteId(),
+                request.getDepartureTime(),
+                request.getBusId(),
+                request.getDriverId(),
+                request.getStatus()
+        ));
     }
 }

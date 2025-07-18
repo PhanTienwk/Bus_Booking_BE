@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Bus;
@@ -72,6 +73,14 @@ public class BusTripController {
         return ApiResponse.<BusTrip>builder()
                 .result(busTripService.updateBusTrip(id, request))
                 .message("Cập nhật chuyến xe thành công")
+                .build();
+    }
+
+    @PostMapping("/filter-bus-trips")
+    public ApiResponse<List<BusTrip>> filterBusTrips(@RequestBody BusTripFilterRequest request) {
+        return ApiResponse.<List<BusTrip>>builder()
+                .result(busTripService.filterBusTrips(request))
+                .message("Lọc danh sách chuyến xe thành công")
                 .build();
     }
 }
