@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.auth;
 
+import com.thuctap.busbooking.dto.response.CostSummaryResponse;
 import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
 import com.thuctap.busbooking.entity.BusRoute;
