@@ -4,6 +4,9 @@ import com.thuctap.busbooking.dto.response.CostSummaryResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import com.thuctap.busbooking.entity.BusStation;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.thuctap.busbooking.entity.BusTrip;
@@ -23,3 +26,4 @@ public interface BusTripRepository extends JpaRepository<BusTrip, Integer> {
     @Query("SELECT COALESCE(SUM(b.costIncurred), 0) FROM BusTrip b WHERE b.departureTime BETWEEN :start AND :end")
     Float sumCostIncurredBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
+

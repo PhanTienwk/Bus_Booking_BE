@@ -19,7 +19,8 @@ public enum ErrorCode {
     ROLE_EXISTED(1009, "Role already existed", HttpStatus.BAD_REQUEST),
     LIST_ROLE_NULL(1010, "List role null", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1011,"User not found!",HttpStatus.BAD_REQUEST),
-    ACCOUNT_EXIST(1012,"Account already exists!",HttpStatus.BAD_REQUEST)
+    ACCOUNT_EXIST(1012,"Account already exists!",HttpStatus.BAD_REQUEST),
+    INVALID_OTP(1013,"Invalid OTP code",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

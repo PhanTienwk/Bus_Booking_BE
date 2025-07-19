@@ -8,6 +8,7 @@ import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.service.auth.UserService;
 import com.thuctap.busbooking.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
@@ -24,7 +25,6 @@ import java.util.List;
 public class UserController {
 
     UserServiceImpl userService;
-
     @GetMapping("/list-user")
     ApiResponse<List<User>> getAllUsers() {
         return ApiResponse.<List<User>>builder()

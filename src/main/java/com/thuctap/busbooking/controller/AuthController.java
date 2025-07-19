@@ -7,6 +7,7 @@ import com.thuctap.busbooking.dto.request.VerifyRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.dto.response.JwtResponse;
 import com.thuctap.busbooking.entity.Account;
+import com.thuctap.busbooking.exception.ErrorCode;
 import com.thuctap.busbooking.service.auth.AuthService;
 import com.thuctap.busbooking.service.impl.AccountServiceImpl;
 import lombok.AccessLevel;
@@ -31,24 +32,35 @@ public class AuthController {
                 .result(authService.login(loginRequest))
                 .build();
     }
-
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ApiResponse<?> register(@RequestBody RegisterRequest request) {
         String result = accountService.sendVerificationEmail(request.getEmail());
-        return ResponseEntity.ok(result);
+        return ApiResponse.builder()
+                .code(200)
+                .message("Email sent successfully!")
+                .build();
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verify(@RequestBody VerifyRequest request) {
+    public ApiResponse<?> verify(@RequestBody VerifyRequest request) {
         if (accountService.verifyEmail(request.getEmail(), request.getCode())) {
-            return ResponseEntity.ok("Email xác minh thành công!");
+            return ApiResponse.builder()
+                    .code(200)
+                    .message("Successful authentication!")
+                    .build();
         }
-        return ResponseEntity.badRequest().body("Mã OTP không hợp lệ!");
+        return ApiResponse.builder()
+                .code(ErrorCode.INVALID_OTP.getCode())
+                .message(ErrorCode.INVALID_OTP.getMessage())
+                .build();
     }
 
     @PostMapping("/create-account")
-    public ResponseEntity<?> createAccount(@RequestBody AccountCreationRequest request) {
+    public ApiResponse<?> createAccount(@RequestBody AccountCreationRequest request) {
         accountService.createAccountUser(request);
-        return ResponseEntity.ok("Tạo tài khoản thành công!");
+        return ApiResponse.builder()
+                .code(200)
+                .message("Account created successfully!")
+                .build();
     }
 }

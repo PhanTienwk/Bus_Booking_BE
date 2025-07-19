@@ -130,6 +130,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public boolean verifyEmail(String email, String code) {
+        log.info(email+code);
         return otpRepository.findByEmail(email)
                 .filter(otp -> otp.getExpiresAt().isAfter(LocalDateTime.now()))
                 .map(otp -> {
