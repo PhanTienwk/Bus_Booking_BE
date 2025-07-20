@@ -14,7 +14,7 @@ import com.thuctap.busbooking.entity.BusTrip;
 import java.time.LocalDateTime;
 
 @Repository
-public interface BusTripRepository extends JpaRepository<BusTrip, Integer> {
+public interface BusTripRepository extends JpaRepository<BusTrip, Integer>,JpaSpecificationExecutor<BusTrip> {
     long countByStatus(int status);
 
     @Query("SELECT SUM(b.costOperating + b.costIncurred) FROM BusTrip b WHERE b.departureTime BETWEEN :start AND :end")
