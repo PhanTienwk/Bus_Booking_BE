@@ -21,6 +21,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(1011,"User not found!",HttpStatus.BAD_REQUEST),
     ACCOUNT_EXIST(1012,"Account already exists!",HttpStatus.BAD_REQUEST),
     INVALID_OTP(1013,"Invalid OTP code",HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED(1014,"Image upload failed",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
