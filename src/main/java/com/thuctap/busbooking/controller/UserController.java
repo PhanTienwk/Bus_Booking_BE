@@ -1,11 +1,12 @@
 package com.thuctap.busbooking.controller;
 
-import com.thuctap.busbooking.dto.request.UserFilterRequest;
-import com.thuctap.busbooking.dto.request.UserRequest;
+import com.thuctap.busbooking.dto.request.*;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.UserCreationResponse;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.service.auth.UserService;
+import com.thuctap.busbooking.service.impl.CloudinaryService;
 import com.thuctap.busbooking.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,6 +27,7 @@ import java.util.List;
 public class UserController {
 
     UserServiceImpl userService;
+    CloudinaryService cloudinaryService;
     @GetMapping("/list-user")
     ApiResponse<List<User>> getAllUsers() {
         return ApiResponse.<List<User>>builder()
@@ -88,6 +91,60 @@ public class UserController {
         return ApiResponse.<List<User>>builder()
                 .result(filteredUsers)
                 .message("Lọc danh sách người dùng thành công")
+                .build();
+    }
+
+    @PostMapping("/complete-registration")
+    ApiResponse<UserCreationResponse> createUser(@RequestBody UserCreationRequest request){
+        User user = userService.createUserLogin(request);
+        UserCreationResponse userCreationResponse = UserCreationResponse.builder()
+                .name(user.getName())
+                .build();
+        return ApiResponse.<UserCreationResponse>builder()
+                .code(200)
+                .message("Account created successfully")
+                .result(userCreationResponse)
+                .build();
+    }
+
+    @PostMapping("/create-user")
+    ApiResponse<UserCreationResponse> createUser1(@RequestBody UserCreationRequest request){
+        User user = userService.createUserLogin(request);
+        UserCreationResponse userCreationResponse = UserCreationResponse.builder()
+                .name(user.getName())
+                .build();
+        return ApiResponse.<UserCreationResponse>builder()
+                .code(200)
+                .message("Account created successfully")
+                .result(userCreationResponse)
+                .build();
+    }
+
+    @PostMapping("/create-driver")
+    ApiResponse<UserCreationResponse> createDriver(@ModelAttribute  DriverCreationRequest request){
+        System.out.println(">>> File nhận được: " + request.getFile().getOriginalFilename());
+        User user = userService.createDriver(request);
+        UserCreationResponse userCreationResponse = UserCreationResponse.builder()
+                .name(user.getName())
+                .build();
+        return ApiResponse.<UserCreationResponse>builder()
+                .code(200)
+                .message("Account created successfully")
+                .result(userCreationResponse)
+                .build();
+    }
+
+    @PostMapping("/create-photo")
+    ApiResponse createDriver1(@ModelAttribute Image request){
+        System.out.println(">>> File nhận được: " + request.getFile().getOriginalFilename());
+        try {
+            cloudinaryService.uploadFile(request.getFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ApiResponse.<UserCreationResponse>builder()
+                .code(200)
+                .message("Account created successfully")
                 .build();
     }
 

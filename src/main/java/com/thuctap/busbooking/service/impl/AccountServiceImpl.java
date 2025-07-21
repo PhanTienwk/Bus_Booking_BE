@@ -58,10 +58,20 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(account);
     }
 
+    public Account createAccountDriver(AccountCreationRequest request){
+        if(accountRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.ACCOUNT_EXIST);
+        Account account =accountMapper.toAccount(request);
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        account.setStatus(1);
+        Role role = roleRepository.findByName("DRIVER");
+        account.setRole(role);
+        return accountRepository.save(account);
+    }
+
     public String sendVerificationEmail(String email) {
-        if (accountRepository.findByEmail(email).isPresent()) {
-            return "Email already exists!";
-        }
+        if (accountRepository.existsByEmail(email))
+            throw new AppException(ErrorCode.EMAIL_EXIST);
         String code = generateVerificationCode();
         Otp otp = Otp.builder()
                 .email(email)

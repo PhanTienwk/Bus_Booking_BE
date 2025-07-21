@@ -22,6 +22,10 @@ public enum ErrorCode {
     ACCOUNT_EXIST(1012,"Account already exists!",HttpStatus.BAD_REQUEST),
     INVALID_OTP(1013,"Invalid OTP code",HttpStatus.BAD_REQUEST),
     UPLOAD_FAILED(1014,"Image upload failed",HttpStatus.BAD_REQUEST),
+    PHONE_EXIST(1012,"Phone already exists!",HttpStatus.BAD_REQUEST),
+    CCCD_EXIST(1012,"CCCD already exists!",HttpStatus.BAD_REQUEST),
+    EMAIL_EXIST(1012,"Email already exists!",HttpStatus.BAD_REQUEST),
+    PHOTO_UPLOAD_FAILED(1012,"Photo upload failed!",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
