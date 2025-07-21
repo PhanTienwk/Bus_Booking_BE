@@ -1,13 +1,19 @@
 package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.SpecificationQuery.FilterUser;
+import com.thuctap.busbooking.dto.request.AccountCreationRequest;
+import com.thuctap.busbooking.dto.request.DriverCreationRequest;
+import com.thuctap.busbooking.dto.request.UserCreationRequest;
 import com.thuctap.busbooking.dto.request.UserRequest;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.User;
+import com.thuctap.busbooking.exception.AppException;
+import com.thuctap.busbooking.exception.ErrorCode;
+import com.thuctap.busbooking.mapper.UserMapper;
 import com.thuctap.busbooking.repository.AccountRepository;
 import com.thuctap.busbooking.repository.UserRepository;
+import com.thuctap.busbooking.service.auth.AccountService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
     AccountRepository accountRepository;
+    AccountService accountService;
+    UserMapper userMapper;
+    CloudinaryService cloudinaryService;
 
     @Override
     public List<User> getAllUsers() {
@@ -95,6 +105,50 @@ public class UserServiceImpl implements UserService {
 
         account.setStatus(1);
         accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public User createUserLogin(UserCreationRequest request) {
+        AccountCreationRequest request1 = new AccountCreationRequest(request.getEmail(), request.getPassword());
+        Account account = accountService.createAccountUser(request1);
+
+        if(userRepository.existsByCccd(request.getCccd()))
+            throw new AppException(ErrorCode.CCCD_EXIST);
+        if(userRepository.existsByPhone(request.getPhone()))
+            throw new AppException(ErrorCode.PHONE_EXIST);
+        User user = userMapper.toUserCreation(request);
+        user.setAccount(account);
+        user.setAvatar("https://res.cloudinary.com/dxxswaeor/image/upload/v1753078869/file_afjup6.jpg");
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public User createDriver(DriverCreationRequest request) {
+        AccountCreationRequest request1 = new AccountCreationRequest(request.getEmail(), request.getPassword());
+        Account account = accountService.createAccountDriver(request1);
+        log.info(request.getEmail()+request.getPassword());
+        String imgurl = "https://res.cloudinary.com/dxxswaeor/image/upload/v1753078869/file_afjup6.jpg";
+        if(request.getFile() != null && !request.getFile().isEmpty()){
+            try {
+                log.info(String.valueOf(request.getFile()));
+
+                imgurl = cloudinaryService.uploadFile(request.getFile());
+            } catch (IOException e) {
+                throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
+            }
+        }
+        log.info(imgurl);
+        if(userRepository.existsByCccd(request.getCccd()))
+            throw new AppException(ErrorCode.CCCD_EXIST);
+        if(userRepository.existsByPhone(request.getPhone()))
+            throw new AppException(ErrorCode.PHONE_EXIST);
+        log.info(imgurl);
+        User user = userMapper.toDriverCreation(request);
+        user.setAccount(account);
+        user.setAvatar(imgurl);
+        return userRepository.save(user);
     }
 
     public List<User> filterUsers(String name, Integer gender, LocalDateTime birthday, String phone, String email, Integer status, Integer roleId) {
