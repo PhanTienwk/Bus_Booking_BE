@@ -15,6 +15,7 @@ import com.thuctap.busbooking.repository.UserRepository;
 import com.thuctap.busbooking.service.auth.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.UserService;
@@ -149,6 +150,13 @@ public class UserServiceImpl implements UserService {
         user.setAccount(account);
         user.setAvatar(imgurl);
         return userRepository.save(user);
+    }
+
+    public User getMyInfo(){
+        var context = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByEmail(String.valueOf(context)).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByAccount(account);
+        return user;
     }
 
     public List<User> filterUsers(String name, Integer gender, LocalDateTime birthday, String phone, String email, Integer status, Integer roleId) {

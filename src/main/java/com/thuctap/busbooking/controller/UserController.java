@@ -148,4 +148,11 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/myinfo")
+    ApiResponse<User> getMyInfo(){
+        return ApiResponse.<User>builder()
+                .result(userService.getMyInfo())
+                .message("Account get account success !")
+                .build();
+    }
 }
