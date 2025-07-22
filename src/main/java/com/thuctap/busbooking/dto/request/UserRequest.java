@@ -12,5 +12,5 @@ public class UserRequest {
     private String name;
     private String phone;
     private Integer gender;
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 }
