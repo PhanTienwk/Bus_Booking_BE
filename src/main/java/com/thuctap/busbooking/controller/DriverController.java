@@ -2,19 +2,19 @@ package com.thuctap.busbooking.controller;
 
 import com.thuctap.busbooking.dto.request.UserFilterRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.DriverScheduleResponse;
 import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.service.impl.DriverServiceImpl;
 import com.thuctap.busbooking.service.impl.UserServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -50,4 +50,19 @@ public class DriverController {
                 .message("Lọc danh sách tài xế thành công")
                 .build();
     }
+
+    @GetMapping("/schedule/{driverId}")
+    public ApiResponse<List<DriverScheduleResponse>> getDriverScheduleByWeek(
+            @PathVariable Integer driverId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
+    ) {
+        List<DriverScheduleResponse> schedules = driverService.getScheduleByDriverAndDateRange(driverId, startDate, endDate);
+
+        return ApiResponse.<List<DriverScheduleResponse>>builder()
+                .result(schedules)
+                .message("Lấy lịch chạy xe thành công")
+                .build();
+    }
+
 }
