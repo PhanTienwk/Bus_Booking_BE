@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class User {
     String avatar;
     String phone;
     int gender;
-    LocalDateTime birthDate;
+    LocalDate birthDate;
     @OneToOne
     @JoinColumn(name = "idAccount")
     Account account;
