@@ -8,7 +8,9 @@ import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.service.auth.UserService;
 import com.thuctap.busbooking.service.impl.CloudinaryService;
 import com.thuctap.busbooking.service.impl.UserServiceImpl;
+import jakarta.servlet.annotation.MultipartConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@MultipartConfig
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
 
@@ -120,12 +123,11 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/create-driver")
+    @PostMapping(value = "/create-driver" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ApiResponse<UserCreationResponse> createDriver(@ModelAttribute  DriverCreationRequest request){
-        System.out.println(">>> File nhận được: " + request.getFile().getOriginalFilename());
         User user = userService.createDriver(request);
         UserCreationResponse userCreationResponse = UserCreationResponse.builder()
-                .name(user.getName())
+                .name("12")
                 .build();
         return ApiResponse.<UserCreationResponse>builder()
                 .code(200)

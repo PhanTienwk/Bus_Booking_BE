@@ -127,8 +127,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createDriver(DriverCreationRequest request) {
+        System.out.println("12222");
         AccountCreationRequest request1 = new AccountCreationRequest(request.getEmail(), request.getPassword());
+        log.info(request.getEmail()+request.getPassword());
         Account account = accountService.createAccountDriver(request1);
+        System.out.println("12222");
         log.info(request.getEmail()+request.getPassword());
         String imgurl = "https://res.cloudinary.com/dxxswaeor/image/upload/v1753078869/file_afjup6.jpg";
         if(request.getFile() != null && !request.getFile().isEmpty()){
@@ -140,7 +143,6 @@ public class UserServiceImpl implements UserService {
                 throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
             }
         }
-        log.info(imgurl);
         if(userRepository.existsByCccd(request.getCccd()))
             throw new AppException(ErrorCode.CCCD_EXIST);
         if(userRepository.existsByPhone(request.getPhone()))
