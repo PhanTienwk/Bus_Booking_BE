@@ -2,8 +2,10 @@ package com.thuctap.busbooking.controller;
 
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Ticket;
+import com.thuctap.busbooking.exception.ErrorCode;
 import com.thuctap.busbooking.service.impl.TicketServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,14 @@ public class TicketController {
     ApiResponse<List<Ticket>> getAllTickets() {
         return ApiResponse.<List<Ticket>>builder()
                 .result(ticketService.getAllTickets())
+                .message("Lấy danh sách vé thành công")
+                .build();
+    }
+
+    @GetMapping("/list-ticket/{id}")
+    ApiResponse<List<Ticket>> getListTicketID(@PathVariable Integer id){
+        return ApiResponse.<List<Ticket>>builder()
+                .result(ticketService.getAllTicketsID(id))
                 .message("Lấy danh sách vé thành công")
                 .build();
     }
