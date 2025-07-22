@@ -5,5 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.thuctap.busbooking.entity.Ticket;
 
+import java.util.List;
+
 @Repository
-public interface TicketRepository extends JpaRepository<Ticket, Integer> {}
+public interface TicketRepository extends JpaRepository<Ticket, Integer> {
+    List<Ticket> findByInvoiceId(int invoiceId);
+}

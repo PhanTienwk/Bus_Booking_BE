@@ -23,4 +23,8 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> getAllTickets() {
         return ticketRepository.findAll();
     }
+
+    public List<Ticket> getAllTicketsID(int id) {
+        return ticketRepository.findByInvoiceId(id);
+    }
 }
