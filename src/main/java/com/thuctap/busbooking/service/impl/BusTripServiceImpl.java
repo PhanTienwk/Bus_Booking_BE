@@ -20,6 +20,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class BusTripServiceImpl implements BusTripService {
     BusRepository busRepo;
     BusRouteRepository busRouteRepo;
     UserRepository userRepo;
+
     public List<BusTrip> getAllBusTrip() {
         return busTripRepo.findAll();
     }
@@ -61,7 +63,6 @@ public class BusTripServiceImpl implements BusTripService {
     }
 
     public BusTrip addBusTrip(BusTripRequest request) {
-        // Kiểm tra các trường bắt buộc
         if (request.getBusRouteId() == null || request.getDepartureTime() == null ||
                 request.getCostOperating() == null || request.getCostIncurred() == null ||
                 request.getPrice() == null || request.getBusId() == null || request.getDriverId() == null) {
@@ -75,6 +76,9 @@ public class BusTripServiceImpl implements BusTripService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy xe với id: " + request.getBusId()));
         User driver = userRepo.findById(request.getDriverId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài xế với id: " + request.getDriverId()));
+
+        // Kiểm tra và tạo ghế cho xe nếu chưa tồn tại
+
 
         // Tạo mới BusTrip
         BusTrip busTrip = BusTrip.builder()
