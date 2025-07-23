@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.thuctap.busbooking.entity.Province;
 
 @Repository
-public interface ProvinceRepository extends JpaRepository<Province, Integer> {}
+public interface ProvinceRepository extends JpaRepository<Province, Integer> {
+    boolean existsByName(String name);
+}
