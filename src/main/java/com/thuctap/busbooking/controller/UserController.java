@@ -3,6 +3,7 @@ package com.thuctap.busbooking.controller;
 import com.thuctap.busbooking.dto.request.*;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.dto.response.UserCreationResponse;
+import com.thuctap.busbooking.dto.response.UserInfoResponse;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.service.auth.UserService;
@@ -154,6 +155,41 @@ public class UserController {
     ApiResponse<User> getMyInfo(){
         return ApiResponse.<User>builder()
                 .result(userService.getMyInfo())
+                .message("Account get account success !")
+                .build();
+    }
+    @GetMapping("/myinfouser")
+    ApiResponse<UserInfoResponse> getMyInfoUser(){
+        User user = userService.getMyInfo();
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .name(user.getName())
+                .phone(user.getPhone())
+                .birthDate(user.getBirthDate())
+                .avatar(user.getAvatar())
+                .gender(user.getGender())
+                .cccd(user.getCccd())
+                .build();
+        return ApiResponse.<UserInfoResponse>builder()
+                .code(1000)
+                .result(userInfoResponse)
+                .message("Account get account success !")
+                .build();
+    }
+
+    @PostMapping(value = "/update-user-info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ApiResponse<UserInfoResponse> updateMyInfoUser(@ModelAttribute  UserUpdateInfoRequest request){
+        User user = userService.updateUserInfo(request);
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .name(user.getName())
+                .phone(user.getPhone())
+                .birthDate(user.getBirthDate())
+                .avatar(user.getAvatar())
+                .gender(user.getGender())
+                .cccd(user.getCccd())
+                .build();
+        return ApiResponse.<UserInfoResponse>builder()
+                .code(1000)
+                .result(userInfoResponse)
                 .message("Account get account success !")
                 .build();
     }
