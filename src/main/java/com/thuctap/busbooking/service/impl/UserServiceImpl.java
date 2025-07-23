@@ -1,10 +1,7 @@
 package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.SpecificationQuery.FilterUser;
-import com.thuctap.busbooking.dto.request.AccountCreationRequest;
-import com.thuctap.busbooking.dto.request.DriverCreationRequest;
-import com.thuctap.busbooking.dto.request.UserCreationRequest;
-import com.thuctap.busbooking.dto.request.UserRequest;
+import com.thuctap.busbooking.dto.request.*;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.exception.AppException;
@@ -127,17 +124,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createDriver(DriverCreationRequest request) {
-        System.out.println("12222");
         AccountCreationRequest request1 = new AccountCreationRequest(request.getEmail(), request.getPassword());
-        log.info(request.getEmail()+request.getPassword());
         Account account = accountService.createAccountDriver(request1);
-        System.out.println("12222");
-        log.info(request.getEmail()+request.getPassword());
         String imgurl = "https://res.cloudinary.com/dxxswaeor/image/upload/v1753078869/file_afjup6.jpg";
         if(request.getFile() != null && !request.getFile().isEmpty()){
             try {
                 log.info(String.valueOf(request.getFile()));
-
                 imgurl = cloudinaryService.uploadFile(request.getFile());
             } catch (IOException e) {
                 throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
@@ -159,6 +151,29 @@ public class UserServiceImpl implements UserService {
         Account account = accountRepository.findByEmail(String.valueOf(context)).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
         User user = userRepository.findByAccount(account);
         return user;
+    }
+
+    public User updateUserInfo(UserUpdateInfoRequest request){
+        var context = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByEmail(String.valueOf(context)).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByAccount(account);
+
+        if(request.getFile() != null && !request.getFile().isEmpty()){
+            try {
+                log.info(String.valueOf(request.getFile()));
+                String imgurl = cloudinaryService.uploadFile(request.getFile());
+                user.setAvatar(imgurl);
+            } catch (IOException e) {
+                throw new AppException(ErrorCode.PHOTO_UPLOAD_FAILED);
+            }
+        }
+
+        user.setName(request.getName());
+        user.setBirthDate(request.getBirthDate());
+        user.setCccd(request.getCccd());
+        user.setPhone(request.getPhone());
+        user.setGender(request.getGender());
+        return userRepository.save(user);
     }
 
     public List<User> filterUsers(String name, Integer gender, LocalDateTime birthday, String phone, String email, Integer status, Integer roleId) {

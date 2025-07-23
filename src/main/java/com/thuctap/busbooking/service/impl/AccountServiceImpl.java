@@ -1,6 +1,7 @@
 package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.dto.request.AccountCreationRequest;
+import com.thuctap.busbooking.dto.request.PasswordResetRequest;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.Otp;
 import com.thuctap.busbooking.entity.Role;
@@ -19,6 +20,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,18 @@ public class AccountServiceImpl implements AccountService {
         Role role = roleRepository.findByName("USER");
         account.setRole(role);
         return accountRepository.save(account);
+    }
+
+    public boolean resetPass(PasswordResetRequest request){
+        var context = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByEmail(String.valueOf(context)).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+        System.out.println(account.getPassword().equals(request.getCurrentPassword()));
+        if(passwordEncoder.matches(request.getCurrentPassword(), account.getPassword())){
+            account.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
     }
 
     public Account createAccountDriver(AccountCreationRequest request){
