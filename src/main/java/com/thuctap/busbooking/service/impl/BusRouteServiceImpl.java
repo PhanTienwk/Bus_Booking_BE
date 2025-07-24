@@ -5,6 +5,7 @@ import com.thuctap.busbooking.entity.*;
 import com.thuctap.busbooking.repository.BusRouteRepository;
 import com.thuctap.busbooking.repository.BusStationRepository;
 import com.thuctap.busbooking.repository.InvoiceRepository;
+import com.thuctap.busbooking.service.auth.RouteService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class BusRouteServiceImpl implements BusRouteService {
 
     BusRouteRepository busRouteRepository;
     BusStationRepository busStationRepository;
+    RouteService routeService;
 
     @Override
     public List<BusRoute> getAllBusRoutes() {
@@ -81,13 +83,13 @@ public class BusRouteServiceImpl implements BusRouteService {
         busRouteRepository.save(busRoute);
     }
 
+    @Transactional
     public BusRoute addBusRoute(BusRouteRequest request) {
         BusStation from = busStationRepository.findById(request.getBusStationFromId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bến đi với ID: " + request.getBusStationFromId()));
 
         BusStation to = busStationRepository.findById(request.getBusStationToId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bến đến với ID: " + request.getBusStationToId()));
-
         BusRoute route = BusRoute.builder()
                 .busStationFrom(from)
                 .busStationTo(to)
@@ -97,7 +99,15 @@ public class BusRouteServiceImpl implements BusRouteService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-
+        routeService.addRoute(route,from,1,1);
+        int k = 2;
+        for(int i : request.getListRoute()){
+            BusStation busStation = busStationRepository.findById(i)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy bến đến với ID: " + i));
+            routeService.addRoute(route,busStation,k,1);
+            ++k;
+        }
+        routeService.addRoute(route,to,k,1);
         return busRouteRepository.save(route);
     }
 
