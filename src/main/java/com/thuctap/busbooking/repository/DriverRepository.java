@@ -24,10 +24,12 @@ public interface DriverRepository extends JpaRepository<User, Integer>, JpaSpeci
         toStation.address,
         bus.name,
         trip.departureTime,
-        route.travelTime
+        route.travelTime,
+        bus.busType
     )
     FROM BusTrip trip
     JOIN trip.bus bus
+    JOIN bus.busType busType
     JOIN trip.busRoute route
     JOIN route.busStationFrom fromStation
     JOIN route.busStationTo toStation

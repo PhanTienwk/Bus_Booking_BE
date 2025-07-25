@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.dto.response;
 
+import com.thuctap.busbooking.entity.BusType;
 import com.thuctap.busbooking.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,4 +20,5 @@ public class DriverScheduleResponse {
     String licensePlate;
     LocalDateTime departureTime;
     float estimatedHours;
+    private BusType busType;
 }

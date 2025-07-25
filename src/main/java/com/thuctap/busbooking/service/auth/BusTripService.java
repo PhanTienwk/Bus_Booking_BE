@@ -3,6 +3,7 @@ package com.thuctap.busbooking.service.auth;
 import com.thuctap.busbooking.dto.response.CostSummaryResponse;
 import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
+import com.thuctap.busbooking.dto.response.PassengerTripInfoResponse;
 import com.thuctap.busbooking.entity.BusRoute;
 import com.thuctap.busbooking.entity.BusTrip;
 import com.thuctap.busbooking.entity.User;
@@ -20,4 +21,5 @@ public interface BusTripService {
     BusTrip addBusTrip(BusTripRequest request);
     BusTrip updateBusTrip(Integer id, BusTripRequest request);
     List<BusTrip> filterBusTrips(BusTripFilterRequest request);
+    List<PassengerTripInfoResponse> getPassengerTripInfoByTripId(Integer tripId);
 }
