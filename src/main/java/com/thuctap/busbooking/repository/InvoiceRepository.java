@@ -2,6 +2,8 @@ package com.thuctap.busbooking.repository;
 
 import com.thuctap.busbooking.dto.response.MonthlyFinanceResponse;
 import com.thuctap.busbooking.dto.response.MonthlyRevenueResponse;
+import com.thuctap.busbooking.entity.Account;
+import com.thuctap.busbooking.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +46,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             "ORDER BY FUNCTION('DATE_FORMAT', b.departureTime, '%Y-%m')")
     List<MonthlyFinanceResponse> getMonthlyFinance(@Param("start") LocalDateTime start,
                                                    @Param("end") LocalDateTime end);
+
+    List<Invoice> findByBusTripId(Integer tripId);
 }

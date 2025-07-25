@@ -1,6 +1,7 @@
 package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.dto.response.CostSummaryResponse;
+import com.thuctap.busbooking.dto.response.PassengerTripInfoResponse;
 import com.thuctap.busbooking.entity.BusTrip;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.repository.BusTripRepository;
@@ -22,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,9 @@ public class BusTripServiceImpl implements BusTripService {
     BusRepository busRepo;
     BusRouteRepository busRouteRepo;
     UserRepository userRepo;
+    TicketRepository ticketRepository;
+    SeatPositionRepository seatPositionRepository;
+    InvoiceRepository invoiceRepository;
 
     public List<BusTrip> getAllBusTrip() {
         return busTripRepo.findAll();
@@ -46,8 +53,6 @@ public class BusTripServiceImpl implements BusTripService {
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
-
-
 
     public Boolean updateBusTripStatus(Integer id, Integer status) {
         BusTrip busTrip = busTripRepo.findById(id)
@@ -141,5 +146,57 @@ public class BusTripServiceImpl implements BusTripService {
                 request.getDriverId(),
                 request.getStatus()
         ));
+    }
+
+    @Override
+    public List<PassengerTripInfoResponse> getPassengerTripInfoByTripId(Integer tripId) {
+        BusTrip busTrip = busTripRepo.findById(tripId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy chuyến xe với id: " + tripId));
+
+        Integer busId = busTrip.getBus().getId();
+        if (busId == null) {
+            throw new RuntimeException("Chuyến xe không có thông tin xe");
+        }
+
+        List<SeatPosition> seats = seatPositionRepository.findByBusId(busId);
+
+        List<Invoice> invoices = invoiceRepository.findByBusTripId(tripId);
+        if (invoices.isEmpty()) {
+            return seats.stream()
+                    .map(seat -> PassengerTripInfoResponse.builder()
+                            .seatName(seat.getName())
+                            .isBooked(false)
+                            .name(null)
+                            .phone(null)
+                            .pickupPoint(null)
+                            .dropOffPoint(null)
+                            .build())
+                    .toList();
+        }
+
+        List<Integer> invoiceIds = invoices.stream()
+                .map(Invoice::getId)
+                .toList();
+
+        List<Ticket> tickets = ticketRepository.findByInvoiceIdIn(invoiceIds);
+
+        Map<Integer, Ticket> seatToTicketMap = tickets.stream()
+                .collect(Collectors.toMap(t -> t.getSeatPosition().getId(), Function.identity()));
+
+        List<PassengerTripInfoResponse> result = new ArrayList<>();
+
+        for (SeatPosition seat : seats) {
+            Ticket ticket = seatToTicketMap.get(seat.getId());
+
+            result.add(PassengerTripInfoResponse.builder()
+                    .seatName(seat.getName())
+                    .isBooked(ticket != null)
+                    .name(ticket != null ? ticket.getInvoice().getName() : null)
+                    .phone(ticket != null ? ticket.getInvoice().getPhone() : null)
+                    .pickupPoint(ticket != null ? "Điểm lên xe" : null)
+                    .dropOffPoint(ticket != null ? "Điểm xuống xe" : null)
+                    .build());
+        }
+        return result;
     }
 }

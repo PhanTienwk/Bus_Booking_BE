@@ -3,6 +3,7 @@ package com.thuctap.busbooking.controller;
 import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.PassengerTripInfoResponse;
 import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusRoute;
 import com.thuctap.busbooking.entity.BusTrip;
@@ -28,7 +29,6 @@ public class BusTripController {
     BusTripService busTripService;
     BusTripRepository busTripRepository;
 
-
     @GetMapping("/get-all-bustrip")
     public ApiResponse<List<BusTrip>> getAllBusTrip() {
         return ApiResponse.<List<BusTrip>>builder()
@@ -36,7 +36,6 @@ public class BusTripController {
                 .message("Lấy danh sách xe thành công")
                 .build();
     }
-
 
     @GetMapping("/get-all-busroutee")
     public ApiResponse<List<BusRoute>> getAllBusRoutee() {
@@ -93,6 +92,11 @@ public class BusTripController {
     ) {
         return ApiResponse.<List<BusTrip>>builder()
                 .result(busTripRepository.findTripsWithIntermediateStops(fromProvinceId, toProvinceId))
+    @GetMapping("/passenger-trip-info/{tripId}")
+    public ApiResponse<List<PassengerTripInfoResponse>> getPassengerTripInfo(@PathVariable Integer tripId) {
+        return ApiResponse.<List<PassengerTripInfoResponse>>builder()
+                .result(busTripService.getPassengerTripInfoByTripId(tripId))
+                .message("Lấy thông tin hành khách trên chuyến xe thành công")
                 .build();
     }
 }
