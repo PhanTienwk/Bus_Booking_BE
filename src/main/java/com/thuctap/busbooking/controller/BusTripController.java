@@ -92,6 +92,9 @@ public class BusTripController {
     ) {
         return ApiResponse.<List<BusTrip>>builder()
                 .result(busTripRepository.findTripsWithIntermediateStops(fromProvinceId, toProvinceId))
+                .build();
+    }
+
     @GetMapping("/passenger-trip-info/{tripId}")
     public ApiResponse<List<PassengerTripInfoResponse>> getPassengerTripInfo(@PathVariable Integer tripId) {
         return ApiResponse.<List<PassengerTripInfoResponse>>builder()
