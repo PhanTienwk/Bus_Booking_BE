@@ -8,6 +8,7 @@ import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusRoute;
 import com.thuctap.busbooking.entity.BusTrip;
 import com.thuctap.busbooking.entity.User;
+import com.thuctap.busbooking.repository.BusTripRepository;
 import com.thuctap.busbooking.service.auth.BusTripService;
 import com.thuctap.busbooking.service.impl.BusRouteServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import java.util.List;
 public class BusTripController {
 
     BusTripService busTripService;
+    BusTripRepository busTripRepository;
 
     @GetMapping("/get-all-bustrip")
     public ApiResponse<List<BusTrip>> getAllBusTrip() {
@@ -83,6 +85,13 @@ public class BusTripController {
                 .build();
     }
 
+    @GetMapping("/search")
+    public ApiResponse<List<BusTrip>> searchTripsByProvinces(
+            @RequestParam("fromProvinceId") int fromProvinceId,
+            @RequestParam("toProvinceId") int toProvinceId
+    ) {
+        return ApiResponse.<List<BusTrip>>builder()
+                .result(busTripRepository.findTripsWithIntermediateStops(fromProvinceId, toProvinceId))
     @GetMapping("/passenger-trip-info/{tripId}")
     public ApiResponse<List<PassengerTripInfoResponse>> getPassengerTripInfo(@PathVariable Integer tripId) {
         return ApiResponse.<List<PassengerTripInfoResponse>>builder()
