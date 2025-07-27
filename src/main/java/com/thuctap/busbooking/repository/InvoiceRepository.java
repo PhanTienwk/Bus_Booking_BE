@@ -37,8 +37,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             "CONCAT('', FUNCTION('DATE_FORMAT', b.departureTime, '%Y-%m')), " +
             "COUNT(b.id), " +
             "SUM(i.totalAmount), " +
-            "SUM(b.costOperating + b.costIncurred), " +
-            "SUM(i.totalAmount) - SUM(b.costOperating + b.costIncurred)) " +
+            "SUM(DISTINCT b.costOperating + b.costIncurred), " +
+            "SUM(i.totalAmount) - SUM(DISTINCT b.costOperating + b.costIncurred)) " +
             "FROM Invoice i " +
             "JOIN i.busTrip b " +
             "WHERE b.departureTime BETWEEN :start AND :end " +
