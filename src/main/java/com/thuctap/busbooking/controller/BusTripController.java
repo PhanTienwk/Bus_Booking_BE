@@ -11,6 +11,7 @@ import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.repository.BusTripRepository;
 import com.thuctap.busbooking.service.auth.BusTripService;
 import com.thuctap.busbooking.service.impl.BusRouteServiceImpl;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
@@ -18,6 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -88,10 +93,12 @@ public class BusTripController {
     @GetMapping("/search")
     public ApiResponse<List<BusTrip>> searchTripsByProvinces(
             @RequestParam("fromProvinceId") int fromProvinceId,
-            @RequestParam("toProvinceId") int toProvinceId
+            @RequestParam("toProvinceId") int toProvinceId,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        LocalDateTime currentTimePlusTwoHours = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).plusHours(2);
         return ApiResponse.<List<BusTrip>>builder()
-                .result(busTripRepository.findTripsWithIntermediateStops(fromProvinceId, toProvinceId))
+                .result(busTripRepository.findTripsWithIntermediateStops(fromProvinceId, toProvinceId,date,currentTimePlusTwoHours))
                 .build();
     }
 

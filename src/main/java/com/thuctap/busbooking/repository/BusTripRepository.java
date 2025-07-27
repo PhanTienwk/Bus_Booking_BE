@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.thuctap.busbooking.entity.BusTrip;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,10 +39,14 @@ public interface BusTripRepository extends JpaRepository<BusTrip, Integer>,JpaSp
     WHERE bs1.id_province = :startProvinceId
       AND bs2.id_province = :endProvinceId
       AND r1.route_location < r2.route_location
+      AND DATE(bt.departure_time) = :date
+      AND bt.departure_time >= :currentTimePlusTwoHours
     """, nativeQuery = true)
     List<BusTrip> findTripsWithIntermediateStops(
             @Param("startProvinceId") int startStationId,
-            @Param("endProvinceId") int endStationId
+            @Param("endProvinceId") int endStationId,
+            @Param("date") LocalDate date,
+            @Param("currentTimePlusTwoHours") LocalDateTime currentTimePlusTwoHours
     );
 
 
