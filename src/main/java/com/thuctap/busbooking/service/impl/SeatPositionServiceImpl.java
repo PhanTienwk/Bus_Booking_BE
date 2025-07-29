@@ -22,4 +22,11 @@ public class SeatPositionServiceImpl implements SeatPositionService {
     public List<SeatPosition> getSeatsByBusId(int busId) {
         return seatPositionRepository.findByBusId(busId);
     }
+
+    public void updateSeatPosition(String name,int idBus, boolean status) {
+        SeatPosition seatPosition = seatPositionRepository.findByNameAndBusId(name,idBus);
+        if(seatPosition==null) return;
+        seatPosition.setStatus(status);
+        seatPositionRepository.save(seatPosition);
+    }
 }

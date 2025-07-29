@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface SeatPositionService {
     List<SeatPosition> getSeatsByBusId(int busId);
+    void updateSeatPosition(String name,int idBus, boolean status);
 }

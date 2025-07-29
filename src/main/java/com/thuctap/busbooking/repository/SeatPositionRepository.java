@@ -11,4 +11,6 @@ import java.util.List;
 public interface SeatPositionRepository extends JpaRepository<SeatPosition, Integer> {
     List<SeatPosition> findByBusId(Integer busId);
     void deleteByBusId(int id);
+    List<SeatPosition> findByBusIdAndStatusTrue(Integer busId);
+    SeatPosition findByNameAndBusId(String name, int busId);
 }
