@@ -23,8 +23,19 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     InvoiceRepository invoiceRepository;
 
+    UserRepository userRepository;
     @Override
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
+    }
+
+
+    public List<Invoice> getInvoiceByUserId(String phone) {
+        User user = userRepository.findByPhone(phone);
+        if (user == null) {
+            log.warn("Không tìm thấy người dùng với số điện thoại: {}", phone);
+            return List.of();
+        }
+        return invoiceRepository.findByUserId(user.getId());
     }
 }
