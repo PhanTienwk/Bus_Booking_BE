@@ -19,6 +19,8 @@ import java.util.List;
 public interface BusTripRepository extends JpaRepository<BusTrip, Integer>,JpaSpecificationExecutor<BusTrip> {
     long countByStatus(int status);
 
+    BusTrip findAllById(int integers);
+
     @Query("SELECT SUM(b.costOperating + b.costIncurred) FROM BusTrip b WHERE b.departureTime BETWEEN :start AND :end")
     Integer sumPriceByDepartureTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 

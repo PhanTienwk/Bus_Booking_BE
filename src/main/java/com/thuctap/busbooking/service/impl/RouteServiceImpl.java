@@ -34,4 +34,6 @@ public class RouteServiceImpl implements RouteService {
     public List<Route> getListRoute(int busRoute){
         return routeRepository.findAllByBusRouteId(busRoute);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.dto.response.BusTripSearchResponse;
 import com.thuctap.busbooking.dto.response.CostSummaryResponse;
 import com.thuctap.busbooking.dto.response.PassengerTripInfoResponse;
 import com.thuctap.busbooking.entity.BusTrip;
@@ -20,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +44,7 @@ public class BusTripServiceImpl implements BusTripService {
     TicketRepository ticketRepository;
     SeatPositionRepository seatPositionRepository;
     InvoiceRepository invoiceRepository;
+
 
     public List<BusTrip> getAllBusTrip() {
         return busTripRepo.findAll();
@@ -199,4 +203,39 @@ public class BusTripServiceImpl implements BusTripService {
         }
         return result;
     }
+
+    public List<BusTripSearchResponse> getBusTrip(int startStationId, int endStationId, LocalDate date, int count) {
+        LocalDateTime currentTimePlusTwoHours = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).plusHours(2);
+        List<BusTrip> list = busTripRepo.findTripsWithIntermediateStops(startStationId, endStationId,date,currentTimePlusTwoHours);
+        List<BusTripSearchResponse> responseList = new ArrayList<>();
+        for(BusTrip busTrip : list){
+            int countA = 0;
+            int countB = 0;
+            List<SeatPosition> busTripList = seatPositionRepository.findByBusIdAndStatusTrue(busTrip.getBus().getId());
+            if(busTripList!=null){
+                for(SeatPosition position:busTripList){
+                    if(position.getName().contains("A")) countA++;
+                    else countB++;
+                }
+            }
+            if((countA+countB)<count) continue;
+            BusTripSearchResponse busTripSearchResponse = BusTripSearchResponse.builder()
+                    .id(busTrip.getId())
+                    .bus(busTrip.getBus())
+                    .busRoute(busTrip.getBusRoute())
+                    .costIncurred(busTrip.getCostIncurred())
+                    .departureTime(busTrip.getDepartureTime())
+                    .costOperating(busTrip.getCostOperating())
+                    .status(busTrip.getStatus())
+                    .price(busTrip.getPrice())
+                    .count(countA+countB)
+                    .countA(countA)
+                    .countB(countB)
+                    .build();
+            responseList.add(busTripSearchResponse);
+        }
+        return responseList;
+    }
+
+
 }

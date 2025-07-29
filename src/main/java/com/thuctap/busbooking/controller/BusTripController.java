@@ -3,6 +3,7 @@ package com.thuctap.busbooking.controller;
 import com.thuctap.busbooking.dto.request.BusTripFilterRequest;
 import com.thuctap.busbooking.dto.request.BusTripRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.BusTripSearchResponse;
 import com.thuctap.busbooking.dto.response.PassengerTripInfoResponse;
 import com.thuctap.busbooking.entity.Bus;
 import com.thuctap.busbooking.entity.BusRoute;
@@ -91,14 +92,15 @@ public class BusTripController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<List<BusTrip>> searchTripsByProvinces(
+    public ApiResponse<List<BusTripSearchResponse>> searchTripsByProvinces(
             @RequestParam("fromProvinceId") int fromProvinceId,
             @RequestParam("toProvinceId") int toProvinceId,
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam("ticketCount") int count
     ) {
         LocalDateTime currentTimePlusTwoHours = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).plusHours(2);
-        return ApiResponse.<List<BusTrip>>builder()
-                .result(busTripRepository.findTripsWithIntermediateStops(fromProvinceId, toProvinceId,date,currentTimePlusTwoHours))
+        return ApiResponse.<List<BusTripSearchResponse>>builder()
+                .result(busTripService.getBusTrip(fromProvinceId,toProvinceId,date,count))
                 .build();
     }
 
