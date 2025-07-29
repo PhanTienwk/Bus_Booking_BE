@@ -48,4 +48,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
                                                    @Param("end") LocalDateTime end);
 
     List<Invoice> findByBusTripId(Integer tripId);
+
+    List<Invoice> findByUserId(Integer id);
 }
