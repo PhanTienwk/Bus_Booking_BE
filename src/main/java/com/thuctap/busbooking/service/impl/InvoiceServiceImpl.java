@@ -1,13 +1,13 @@
 package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
-import com.thuctap.busbooking.entity.BusTrip;
-import com.thuctap.busbooking.entity.Invoice;
-import com.thuctap.busbooking.entity.User;
+import com.thuctap.busbooking.entity.*;
 import com.thuctap.busbooking.repository.BusTripRepository;
 import com.thuctap.busbooking.repository.InvoiceRepository;
+import com.thuctap.busbooking.repository.SeatPositionRepository;
 import com.thuctap.busbooking.repository.UserRepository;
 import com.thuctap.busbooking.service.auth.SeatPositionService;
+import com.thuctap.busbooking.service.auth.TicketService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +32,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     BusTripRepository busTripRepository;
     SeatPositionService seatPositionService;
+    SeatPositionRepository seatPositionRepository;
+    TicketService ticketService;
 
 
     UserRepository userRepository;
@@ -45,11 +47,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     public Invoice createInvoice(InvoiceCreationRequest request){
         BusTrip busTrip = busTripRepository.findAllById(request.getId());
-        for(String name : request.getListidseatposition()){
-            System.out.println(busTrip.getId());
-            System.out.println(name);
-            seatPositionService.updateSeatPosition(name,request.getIdbustrip(),false);
-        }
+
         Invoice invoice = Invoice.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -61,7 +59,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .status(1)
                 .busTrip(busTrip)
                 .build();
-        return invoiceRepository.save(invoice);
+        invoiceRepository.save(invoice);
+        for(String name : request.getListidseatposition()){
+            seatPositionService.updateSeatPosition(name,request.getIdbustrip(),false);
+            SeatPosition seatPosition = seatPositionRepository.findByNameAndBusId(name,request.getIdbustrip());
+            Ticket ticket = ticketService.createTicket(invoice,seatPosition);
+        }
+        return invoice;
     };
 
 
