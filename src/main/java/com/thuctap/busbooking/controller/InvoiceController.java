@@ -40,4 +40,11 @@ public class InvoiceController {
         return ApiResponse.builder()
                 .build();
     }
+    @GetMapping("/get-invoice-by-userid")
+    public ApiResponse<List<Invoice>> getInvoiceByUserId(@RequestParam String phone) {
+        return ApiResponse.<List<Invoice>>builder()
+                .result(invoiceService.getInvoiceByUserId(phone))
+                .message("Lấy danh sách hóa đơn thành công")
+                .build();
+    }
 }

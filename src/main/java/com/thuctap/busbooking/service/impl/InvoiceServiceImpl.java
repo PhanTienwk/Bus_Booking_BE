@@ -29,12 +29,18 @@ import java.util.List;
 public class InvoiceServiceImpl implements InvoiceService {
 
     InvoiceRepository invoiceRepository;
+
     BusTripRepository busTripRepository;
     SeatPositionService seatPositionService;
+
+
+    UserRepository userRepository;
+
     @Override
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
     }
+
 
     @Transactional
     public Invoice createInvoice(InvoiceCreationRequest request){
@@ -57,4 +63,15 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .build();
         return invoiceRepository.save(invoice);
     };
+
+
+    public List<Invoice> getInvoiceByUserId(String phone) {
+        User user = userRepository.findByPhone(phone);
+        if (user == null) {
+            log.warn("Không tìm thấy người dùng với số điện thoại: {}", phone);
+            return List.of();
+        }
+        return invoiceRepository.findByUserId(user.getId());
+    }
+
 }

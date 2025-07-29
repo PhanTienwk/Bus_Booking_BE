@@ -9,4 +9,6 @@ import java.util.List;
 public interface InvoiceService {
     List<Invoice> getAllInvoices();
     Invoice createInvoice(InvoiceCreationRequest request);
+   List<Invoice> getInvoiceByUserId(String phone);
+
 }
