@@ -33,11 +33,11 @@ public class InvoiceController {
                 .build();
     }
 
-
     @PostMapping("/create-invoice")
     ApiResponse createInvoice(@RequestBody InvoiceCreationRequest request){
         Invoice invoice = invoiceService.createInvoice(request);
         return ApiResponse.builder()
+                .result(invoice.getId())
                 .build();
     }
     @GetMapping("/get-invoice-by-userid")
@@ -45,6 +45,14 @@ public class InvoiceController {
         return ApiResponse.<List<Invoice>>builder()
                 .result(invoiceService.getInvoiceByUserId(phone))
                 .message("Lấy danh sách hóa đơn thành công")
+                .build();
+    }
+
+    @PutMapping("/update-invoice-status/{invoiceId}")
+    public ApiResponse updateInvoiceStatus(@PathVariable Integer invoiceId) {
+        invoiceService.updateInvoiceStatus(invoiceId, 2);
+        return ApiResponse.builder()
+                .message("Cập nhật trạng thái hóa đơn thành công")
                 .build();
     }
 }

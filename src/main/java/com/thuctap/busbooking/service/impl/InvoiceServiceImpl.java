@@ -78,4 +78,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.findByUserId(user.getId());
     }
 
+    @Override
+    public void updateInvoiceStatus(Integer invoiceId, int status) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+
+        invoice.setStatus(status);
+        invoiceRepository.save(invoice);
+    }
+
 }
