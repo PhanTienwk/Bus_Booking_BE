@@ -48,11 +48,19 @@ public class InvoiceController {
                 .build();
     }
 
-    @PutMapping("/update-invoice-status/{invoiceId}")
-    public ApiResponse updateInvoiceStatus(@PathVariable Integer invoiceId) {
+    @PutMapping("/mark-invoice-paid/{invoiceId}")
+    public ApiResponse markInvoiceAsPaid(@PathVariable Integer invoiceId) {
         invoiceService.updateInvoiceStatus(invoiceId, 2);
         return ApiResponse.builder()
-                .message("Cập nhật trạng thái hóa đơn thành công")
+                .message("Cập nhật trạng thái hóa đơn đã thanh toán thành công")
+                .build();
+    }
+
+    @PutMapping("/mark-invoice-expired/{invoiceId}")
+    public ApiResponse markInvoiceAsExpired(@PathVariable Integer invoiceId) {
+        invoiceService.updateInvoiceStatus(invoiceId, 0);
+        return ApiResponse.builder()
+                .message("Cập nhật trạng thái hóa đơn hết hạn thành công")
                 .build();
     }
 }
