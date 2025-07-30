@@ -1,10 +1,12 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.ExpireInvoiceRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.entity.User;
 import com.thuctap.busbooking.service.auth.InvoiceService;
+import com.thuctap.busbooking.service.auth.SeatPositionService;
 import com.thuctap.busbooking.service.impl.InvoiceServiceImpl;
 import com.thuctap.busbooking.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import java.util.List;
 public class InvoiceController {
 
     InvoiceService invoiceService;
+    SeatPositionService seatPositionService;
 
     @GetMapping("/list-invoice")
     ApiResponse<List<Invoice>> getAllInvoices() {
@@ -56,11 +59,16 @@ public class InvoiceController {
                 .build();
     }
 
-    @PutMapping("/mark-invoice-expired/{invoiceId}")
-    public ApiResponse markInvoiceAsExpired(@PathVariable Integer invoiceId) {
-        invoiceService.updateInvoiceStatus(invoiceId, 0);
+    @PutMapping("/mark-invoice-expired")
+    public ApiResponse markInvoiceAsExpired(@RequestBody ExpireInvoiceRequest request) {
+        invoiceService.updateInvoiceStatus(request.getInvoiceId(), 0);
+
+        for (String seatName : request.getSelectedSeats()) {
+            seatPositionService.updateSeatPosition(seatName, request.getBusId(), true);
+        }
+
         return ApiResponse.builder()
-                .message("Cập nhật trạng thái hóa đơn hết hạn thành công")
+                .message("Cập nhật trạng thái hóa đơn hết hạn và ghế thành công")
                 .build();
     }
 }
