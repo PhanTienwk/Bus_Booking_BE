@@ -86,6 +86,8 @@ public class AccountServiceImpl implements AccountService {
     public String sendVerificationEmail(String email) {
         if (accountRepository.existsByEmail(email))
             throw new AppException(ErrorCode.EMAIL_EXIST);
+        if(otpRepository.existsByEmail(email))
+            throw new AppException(ErrorCode.EMAIL_EXIST);
         String code = generateVerificationCode();
         Otp otp = Otp.builder()
                 .email(email)
