@@ -1,5 +1,7 @@
 package com.thuctap.busbooking.controller;
 
+
+import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.ExpireInvoiceRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
@@ -51,6 +53,23 @@ public class InvoiceController {
                 .build();
     }
 
+
+    @PutMapping("/update-invoice-status")
+    public ApiResponse<Boolean> updateInvoice(@RequestParam Integer id, @RequestParam Integer status) {
+        return ApiResponse.<Boolean>builder()
+                .result(invoiceService.updateInvoiceStatus(id, status))
+                .message("Cập nhật trạng thái bến xe thành công")
+                .build();
+    }
+
+    @PostMapping("/add-bank-detail")
+    ApiResponse createbankdetail(@RequestBody BankDetailRequest request){
+
+        Boolean result = invoiceService.addBankDetail(request);
+        return ApiResponse.<Boolean>builder()
+                .result(result)
+                .message("Thêm thông tin tài khoản ngân hàng thành công")
+
     @PutMapping("/mark-invoice-paid/{invoiceId}")
     public ApiResponse markInvoiceAsPaid(@PathVariable Integer invoiceId) {
         invoiceService.updateInvoiceStatus(invoiceId, 2);
@@ -69,6 +88,7 @@ public class InvoiceController {
 
         return ApiResponse.builder()
                 .message("Cập nhật trạng thái hóa đơn hết hạn và ghế thành công")
+
                 .build();
     }
 }
