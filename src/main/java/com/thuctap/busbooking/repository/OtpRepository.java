@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface OtpRepository extends JpaRepository<Otp, Long> {
     Optional<Otp> findByEmail(String email);
 
+    boolean existsByEmail(String email);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM Otp o WHERE o.expiresAt < :currentTime")

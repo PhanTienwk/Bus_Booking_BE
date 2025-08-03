@@ -77,6 +77,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.findByUserId(user.getId());
     }
 
+
     public Boolean updateInvoiceStatus(Integer id, Integer status) {
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + id));
@@ -106,6 +107,15 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .build();
 
         return bankDTReponsitory.save(bankDetails) != null;
+
+    @Override
+    public void updateInvoiceStatus(Integer invoiceId, int status) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+
+        invoice.setStatus(status);
+        invoiceRepository.save(invoice);
+
     }
 
 }
