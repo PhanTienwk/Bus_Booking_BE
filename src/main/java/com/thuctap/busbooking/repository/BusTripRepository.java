@@ -14,10 +14,13 @@ import com.thuctap.busbooking.entity.BusTrip;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BusTripRepository extends JpaRepository<BusTrip, Integer>,JpaSpecificationExecutor<BusTrip> {
     long countByStatus(int status);
+
+    BusTrip findById(int id);
 
     BusTrip findAllById(int integers);
 
