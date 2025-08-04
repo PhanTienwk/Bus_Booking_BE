@@ -91,11 +91,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
     public Boolean addBankDetail(BankDetailRequest bankDetailRequest) {
-        Invoice invoice = invoiceRepository.findById( bankDetailRequest.getIdInvoice())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " +bankDetailRequest.getIdInvoice()));
+        Invoice invoice = invoiceRepository.findById(bankDetailRequest.getIdInvoice())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + bankDetailRequest.getIdInvoice()));
 
-        User user = userRepository.findById( bankDetailRequest.getIdUser())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " +bankDetailRequest.getIdUser()));
+        User user = userRepository.findById(bankDetailRequest.getIdUser())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + bankDetailRequest.getIdUser()));
 
         BankDetails bankDetails = BankDetails.builder()
                 .bankAccountNumber(bankDetailRequest.getBankAccount())
@@ -107,7 +107,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .build();
 
         return bankDTReponsitory.save(bankDetails) != null;
-
+    }
     @Override
     public void updateInvoiceStatus(Integer invoiceId, int status) {
         Invoice invoice = invoiceRepository.findById(invoiceId)

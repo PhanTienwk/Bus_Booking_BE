@@ -15,7 +15,6 @@ public interface InvoiceService {
     public Boolean updateInvoiceStatus(Integer id, Integer status);
     public Boolean addBankDetail(BankDetailRequest bankDetailRequest);
 
-    List<Invoice> getInvoiceByUserId(String phone);
     void updateInvoiceStatus(Integer invoiceId, int status);
 
 }

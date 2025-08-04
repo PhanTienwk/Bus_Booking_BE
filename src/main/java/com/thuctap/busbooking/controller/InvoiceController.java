@@ -63,13 +63,14 @@ public class InvoiceController {
     }
 
     @PostMapping("/add-bank-detail")
-    ApiResponse createbankdetail(@RequestBody BankDetailRequest request){
+    ApiResponse createbankdetail(@RequestBody BankDetailRequest request) {
 
         Boolean result = invoiceService.addBankDetail(request);
         return ApiResponse.<Boolean>builder()
                 .result(result)
                 .message("Thêm thông tin tài khoản ngân hàng thành công")
-
+                .build();
+    }
     @PutMapping("/mark-invoice-paid/{invoiceId}")
     public ApiResponse markInvoiceAsPaid(@PathVariable Integer invoiceId) {
         invoiceService.updateInvoiceStatus(invoiceId, 2);
