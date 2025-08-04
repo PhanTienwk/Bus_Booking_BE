@@ -21,14 +21,27 @@ public interface BusTripRepository extends JpaRepository<BusTrip, Integer>,JpaSp
 
     BusTrip findAllById(int integers);
 
-    @Query("SELECT SUM(b.costOperating + b.costIncurred) FROM BusTrip b WHERE b.departureTime BETWEEN :start AND :end")
-    Integer sumPriceByDepartureTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT SUM(DISTINCT b.costOperating + b.costIncurred) " +
+            "FROM BusTrip b " +
+            "JOIN Invoice i ON i.busTrip.id = b.id " +
+            "WHERE b.departureTime BETWEEN :start AND :end " +
+            "AND i.status = 3")
+    Integer sumPriceByDepartureTimeBetween(@Param("start") LocalDateTime start,
+                                           @Param("end") LocalDateTime end);
 
-    @Query("SELECT COALESCE(SUM(b.costOperating), 0) FROM BusTrip b WHERE b.departureTime BETWEEN :start AND :end")
-    Float sumCostOperatingBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT COALESCE(SUM(b.costOperating), 0) " +
+            "FROM BusTrip b " +
+            "WHERE b.departureTime BETWEEN :start AND :end " +
+            "AND EXISTS (SELECT 1 FROM Invoice i WHERE i.busTrip.id = b.id AND i.status = 3)")
+    Float sumCostOperatingBetween(@Param("start") LocalDateTime start,
+                                  @Param("end") LocalDateTime end);
 
-    @Query("SELECT COALESCE(SUM(b.costIncurred), 0) FROM BusTrip b WHERE b.departureTime BETWEEN :start AND :end")
-    Float sumCostIncurredBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT COALESCE(SUM(b.costIncurred), 0) " +
+            "FROM BusTrip b " +
+            "WHERE b.departureTime BETWEEN :start AND :end " +
+            "AND EXISTS (SELECT 1 FROM Invoice i WHERE i.busTrip.id = b.id AND i.status = 3)")
+    Float sumCostIncurredBetween(@Param("start") LocalDateTime start,
+                                 @Param("end") LocalDateTime end);
 
     @Query(value = """
     SELECT DISTINCT bt.*
@@ -50,10 +63,5 @@ public interface BusTripRepository extends JpaRepository<BusTrip, Integer>,JpaSp
             @Param("date") LocalDate date,
             @Param("currentTimePlusTwoHours") LocalDateTime currentTimePlusTwoHours
     );
-
-
-
-
-
 }
 

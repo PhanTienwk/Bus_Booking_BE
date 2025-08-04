@@ -2,10 +2,7 @@ package com.thuctap.busbooking.controller;
 
 import com.thuctap.busbooking.dto.request.TimeRangeRequest;
 import com.thuctap.busbooking.dto.response.*;
-import com.thuctap.busbooking.repository.BusRepository;
-import com.thuctap.busbooking.repository.BusRouteRepository;
-import com.thuctap.busbooking.repository.BusTripRepository;
-import com.thuctap.busbooking.repository.InvoiceRepository;
+import com.thuctap.busbooking.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.AccessLevel;
@@ -26,23 +23,20 @@ public class StatisticController {
     BusRouteRepository busRouteRepository;
     BusTripRepository busTripRepository;
     InvoiceRepository invoiceRepository;
+    BusStationRepository busStationRepository;
 
     @GetMapping("/dashboard")
     public ApiResponse<StatisticsResponse> getStatistics() {
         long totalBus = busRepository.countByStatus(1);
         long totalBusRoute = busRouteRepository.countByStatus(1);
         long totalBusTrip = busTripRepository.countByStatus(1);
-        Float totalInvoiceAmount = invoiceRepository.sumTotalAmountByStatus(3);
-
-        if (totalInvoiceAmount == null) {
-            totalInvoiceAmount = 0f;
-        }
+        long totalBusStation = busStationRepository.countByStatus(1);
 
         StatisticsResponse response = new StatisticsResponse(
                 totalBus,
                 totalBusRoute,
                 totalBusTrip,
-                totalInvoiceAmount
+                totalBusStation
         );
 
         return ApiResponse.<StatisticsResponse>builder()

@@ -13,5 +13,5 @@ public class StatisticsResponse {
     private long totalBus;
     private long totalBusRoute;
     private long totalBusTrip;
-    private Float totalInvoiceAmount;
+    private long totalBusStation;
 }

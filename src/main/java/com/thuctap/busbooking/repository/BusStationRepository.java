@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.thuctap.busbooking.entity.BusStation;
 
 @Repository
-public interface BusStationRepository extends JpaRepository<BusStation, Integer> , JpaSpecificationExecutor<BusStation> {}
+public interface BusStationRepository extends JpaRepository<BusStation, Integer> , JpaSpecificationExecutor<BusStation> {
+    long countByStatus(int status);
+}

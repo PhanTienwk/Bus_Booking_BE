@@ -19,7 +19,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.status = :status")
     Float sumTotalAmountByStatus(@Param("status") int status);
 
-    @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.busTrip.departureTime BETWEEN :start AND :end")
+    @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.busTrip.departureTime BETWEEN :start AND :end AND i.status = 3")
     Float sumTotalAmountByTripDepartureTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
     @Query("SELECT new com.thuctap.busbooking.dto.response.MonthlyRevenueResponse(" +
@@ -27,7 +27,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             "SUM(i.totalAmount)) " +
             "FROM Invoice i " +
             "JOIN i.busTrip b " +
-            "WHERE b.departureTime BETWEEN :start AND :end " +
+            "WHERE b.departureTime BETWEEN :start AND :end AND i.status = 3 " +
             "GROUP BY FUNCTION('DATE_FORMAT', b.departureTime, '%Y-%m') " +
             "ORDER BY FUNCTION('DATE_FORMAT', b.departureTime, '%Y-%m')")
     List<MonthlyRevenueResponse> findMonthlyRevenueBetween(@Param("start") LocalDateTime start,
@@ -41,7 +41,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             "SUM(i.totalAmount) - SUM(DISTINCT b.costOperating + b.costIncurred)) " +
             "FROM Invoice i " +
             "JOIN i.busTrip b " +
-            "WHERE b.departureTime BETWEEN :start AND :end " +
+            "WHERE b.departureTime BETWEEN :start AND :end AND i.status = 3 " +
             "GROUP BY FUNCTION('DATE_FORMAT', b.departureTime, '%Y-%m') " +
             "ORDER BY FUNCTION('DATE_FORMAT', b.departureTime, '%Y-%m')")
     List<MonthlyFinanceResponse> getMonthlyFinance(@Param("start") LocalDateTime start,
