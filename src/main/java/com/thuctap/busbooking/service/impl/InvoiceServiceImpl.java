@@ -1,11 +1,9 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
 import com.thuctap.busbooking.entity.*;
-import com.thuctap.busbooking.repository.BusTripRepository;
-import com.thuctap.busbooking.repository.InvoiceRepository;
-import com.thuctap.busbooking.repository.SeatPositionRepository;
-import com.thuctap.busbooking.repository.UserRepository;
+import com.thuctap.busbooking.repository.*;
 import com.thuctap.busbooking.service.auth.SeatPositionService;
 import com.thuctap.busbooking.service.auth.TicketService;
 import jakarta.transaction.Transactional;
@@ -37,6 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
     UserRepository userRepository;
+    BankDTReponsitory bankDTReponsitory;
 
     @Override
     public List<Invoice> getAllInvoices() {
@@ -78,6 +77,37 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.findByUserId(user.getId());
     }
 
+
+    public Boolean updateInvoiceStatus(Integer id, Integer status) {
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + id));
+
+
+
+        invoice.setStatus(status);
+        invoice.setUpdatedAt(LocalDateTime.now());
+        return invoiceRepository.save(invoice) != null;
+    }
+
+
+    public Boolean addBankDetail(BankDetailRequest bankDetailRequest) {
+        Invoice invoice = invoiceRepository.findById(bankDetailRequest.getIdInvoice())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + bankDetailRequest.getIdInvoice()));
+
+        User user = userRepository.findById(bankDetailRequest.getIdUser())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + bankDetailRequest.getIdUser()));
+
+        BankDetails bankDetails = BankDetails.builder()
+                .bankAccountNumber(bankDetailRequest.getBankAccount())
+                .bankName(bankDetailRequest.getBankName())
+                .user(bankDetailRequest.getIdUser() != null ? userRepository.findById(bankDetailRequest.getIdUser())
+                        .orElseThrow(() -> new IllegalArgumentException("User không tồn tại")) : null)
+                .invoice(bankDetailRequest.getIdInvoice() != null ? invoiceRepository.findById(bankDetailRequest.getIdInvoice())
+                        .orElseThrow(() -> new IllegalArgumentException("Hóa đơn không tồn tại")) : null)
+                .build();
+
+        return bankDTReponsitory.save(bankDetails) != null;
+    }
     @Override
     public void updateInvoiceStatus(Integer invoiceId, int status) {
         Invoice invoice = invoiceRepository.findById(invoiceId)
@@ -85,6 +115,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoice.setStatus(status);
         invoiceRepository.save(invoice);
+
     }
 
 }
