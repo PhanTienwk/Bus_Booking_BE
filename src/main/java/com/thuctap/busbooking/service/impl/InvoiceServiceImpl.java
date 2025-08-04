@@ -3,10 +3,13 @@ package com.thuctap.busbooking.service.impl;
 import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
 import com.thuctap.busbooking.entity.*;
+import com.thuctap.busbooking.exception.AppException;
+import com.thuctap.busbooking.exception.ErrorCode;
 import com.thuctap.busbooking.repository.*;
 import com.thuctap.busbooking.service.auth.SeatPositionService;
 import com.thuctap.busbooking.service.auth.TicketService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.InvoiceService;
@@ -32,6 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     SeatPositionService seatPositionService;
     SeatPositionRepository seatPositionRepository;
     TicketService ticketService;
+    AccountRepository accountRepository;
 
 
     UserRepository userRepository;
@@ -46,7 +50,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     public Invoice createInvoice(InvoiceCreationRequest request){
         BusTrip busTrip = busTripRepository.findAllById(request.getId());
-
+        var context = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByEmail(String.valueOf(context)).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByAccount(account);
         Invoice invoice = Invoice.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -56,6 +62,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .timeOfBooking(LocalDateTime.now())
                 .totalAmount(request.getNumber_of_tickets()*busTrip.getPrice())
                 .status(1)
+                .user(user)
                 .busTrip(busTrip)
                 .build();
         invoiceRepository.save(invoice);
