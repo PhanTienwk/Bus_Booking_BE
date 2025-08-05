@@ -10,6 +10,7 @@ import java.util.List;
 public interface InvoiceService {
     List<Invoice> getAllInvoices();
     Invoice createInvoice(InvoiceCreationRequest request);
+    Invoice getInvoiceId(int id);
 
    List<Invoice> getInvoiceByUserId(String phone);
     public Boolean updateInvoiceStatus(Integer id, Integer status);

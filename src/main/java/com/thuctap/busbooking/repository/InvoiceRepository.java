@@ -13,11 +13,14 @@ import com.thuctap.busbooking.entity.Invoice;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.status = :status")
     Float sumTotalAmountByStatus(@Param("status") int status);
+
+    Invoice findById(int integer);
 
     @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.busTrip.departureTime BETWEEN :start AND :end AND i.status = 3")
     Float sumTotalAmountByTripDepartureTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
