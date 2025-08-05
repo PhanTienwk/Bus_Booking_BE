@@ -1,14 +1,18 @@
 package com.thuctap.busbooking.controller;
 
 
+import com.cloudinary.Api;
 import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.ExpireInvoiceRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Invoice;
+import com.thuctap.busbooking.entity.Ticket;
 import com.thuctap.busbooking.entity.User;
+import com.thuctap.busbooking.repository.TicketRepository;
 import com.thuctap.busbooking.service.auth.InvoiceService;
 import com.thuctap.busbooking.service.auth.SeatPositionService;
+import com.thuctap.busbooking.service.auth.TicketService;
 import com.thuctap.busbooking.service.impl.InvoiceServiceImpl;
 import com.thuctap.busbooking.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,7 @@ public class InvoiceController {
 
     InvoiceService invoiceService;
     SeatPositionService seatPositionService;
+    TicketService ticketService;
 
     @GetMapping("/list-invoice")
     ApiResponse<List<Invoice>> getAllInvoices() {
@@ -53,6 +58,14 @@ public class InvoiceController {
                 .message("Lấy danh sách hóa đơn thành công")
                 .build();
     }
+
+    @GetMapping("/get-invoice-by-id/{id}")
+    public ApiResponse<List<Ticket>> getInvoiceById(@PathVariable int id) {
+        return ApiResponse.<List<Ticket>>builder()
+                .result(ticketService.getAllTicketsID(id))
+                .build();
+    }
+
 
 
     @PutMapping("/update-invoice-status")

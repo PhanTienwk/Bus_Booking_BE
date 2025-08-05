@@ -72,7 +72,13 @@ public class InvoiceServiceImpl implements InvoiceService {
             Ticket ticket = ticketService.createTicket(invoice,seatPosition);
         }
         return invoice;
-    };
+    }
+
+    public Invoice getInvoiceId(int id) {
+        return invoiceRepository.findById(id);
+    }
+
+    ;
 
 
     public List<Invoice> getInvoiceByUserId(String phone) {
