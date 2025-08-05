@@ -11,4 +11,5 @@ public interface TicketService {
     List<Ticket> getAllTickets();
     List<Ticket> getAllTicketsID(int id);
     Ticket createTicket(Invoice invoice, SeatPosition seatPosition);
+    public List<Ticket> getTicketByPhone(String phone);
 }

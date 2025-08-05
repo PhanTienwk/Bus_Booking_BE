@@ -4,10 +4,7 @@ import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Ticket;
 import com.thuctap.busbooking.exception.ErrorCode;
 import com.thuctap.busbooking.service.impl.TicketServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +35,14 @@ public class TicketController {
         return ApiResponse.<List<Ticket>>builder()
                 .result(ticketService.getAllTicketsID(id))
                 .message("Lấy danh sách vé thành công")
+                .build();
+    }
+
+    @GetMapping("/get-ticket-by-phone")
+    public ApiResponse<List<Ticket>> getTicketByPhone(@RequestParam String phone) {
+        return ApiResponse.<List<Ticket>>builder()
+                .result(ticketService.getTicketByPhone(phone))
+                .message("lấy danh sách vé thành công")
                 .build();
     }
 }
