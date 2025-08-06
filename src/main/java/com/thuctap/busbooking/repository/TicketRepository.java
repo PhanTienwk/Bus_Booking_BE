@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     List<Ticket> findByInvoiceId(int invoiceId);
+    Ticket findBySeatPositionIdAndBusTripId(int seatPositionId, int busTripId);
+    boolean existsBySeatPositionIdAndBusTripId(int seatPositionId, int busTripId);
 
     Ticket findById(int integer);
 

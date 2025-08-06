@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.entity.BusTrip;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.entity.SeatPosition;
 import com.thuctap.busbooking.entity.Ticket;
@@ -30,11 +31,12 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.findByInvoiceId(id);
     }
 
-    public Ticket createTicket(Invoice invoice, SeatPosition seatPosition) {
+    public Ticket createTicket(Invoice invoice, SeatPosition seatPosition, BusTrip busTrip) {
         Ticket ticket = Ticket.builder()
                 .status(1)
                 .seatPosition(seatPosition)
                 .invoice(invoice)
+                .busTrip(busTrip)
                 .build();
         return ticketRepository.save(ticket);
     }

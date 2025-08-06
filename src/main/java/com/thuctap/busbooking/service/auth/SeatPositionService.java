@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.service.auth;
 
+import com.thuctap.busbooking.dto.response.SeatPositionResponse;
 import com.thuctap.busbooking.entity.SeatPosition;
 
 import java.util.List;

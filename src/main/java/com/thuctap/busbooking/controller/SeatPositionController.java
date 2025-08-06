@@ -1,6 +1,7 @@
 package com.thuctap.busbooking.controller;
 
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.SeatPositionResponse;
 import com.thuctap.busbooking.entity.SeatPosition;
 import com.thuctap.busbooking.service.auth.SeatPositionService;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SeatPositionController {
     SeatPositionService seatPositionService;
-    @GetMapping("/seats/bus/{busId}")
-    public ApiResponse<List<SeatPosition>> getSeatsByBusId(@PathVariable int busId) {
-        List<SeatPosition> seats = seatPositionService.getSeatsByBusId(busId);
+    @GetMapping("/seats/bus/{tripId}")
+    public ApiResponse<List<SeatPosition>> getSeatsByBusId(@PathVariable int tripId) {
+        List<SeatPosition> seats = seatPositionService.getSeatsByBusId(tripId);
         return ApiResponse.<List<SeatPosition>>builder()
                 .result(seats)
                 .build();

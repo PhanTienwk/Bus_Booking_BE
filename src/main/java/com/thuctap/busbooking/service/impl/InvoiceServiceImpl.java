@@ -67,9 +67,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .build();
         invoiceRepository.save(invoice);
         for(String name : request.getListidseatposition()){
-            seatPositionService.updateSeatPosition(name,request.getIdbustrip(),false);
             SeatPosition seatPosition = seatPositionRepository.findByNameAndBusId(name,request.getIdbustrip());
-            Ticket ticket = ticketService.createTicket(invoice,seatPosition);
+            Ticket ticket = ticketService.createTicket(invoice,seatPosition,busTrip);
         }
         return invoice;
     }
