@@ -10,6 +10,6 @@ public interface TicketService {
 
     Ticket createTicket(Invoice invoice, SeatPosition seatPosition, BusTrip busTrip);
 
-    public List<Ticket> getTicketByPhone(String phone);
+    public List<Ticket> getTicketByUserId(int id);
 
 }

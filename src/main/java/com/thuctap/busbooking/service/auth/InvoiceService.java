@@ -12,7 +12,7 @@ public interface InvoiceService {
     Invoice createInvoice(InvoiceCreationRequest request);
     Invoice getInvoiceId(int id);
 
-   List<Invoice> getInvoiceByUserId(String phone);
+   List<Invoice> getInvoiceByUserId(int id);
     public Boolean updateInvoiceStatus(Integer id, Integer status);
     public Boolean addBankDetail(BankDetailRequest bankDetailRequest);
 
