@@ -162,6 +162,7 @@ public class UserController {
     ApiResponse<UserInfoResponse> getMyInfoUser(){
         User user = userService.getMyInfo();
         UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .id(user.getId())
                 .name(user.getName())
                 .phone(user.getPhone())
                 .birthDate(user.getBirthDate())

@@ -31,6 +31,9 @@ public class Ticket {
     Invoice invoice;
     @Column(nullable = false)
     int status;
+    @ManyToOne
+    @JoinColumn(name = "idBusTrip")
+    BusTrip busTrip;
     @CreatedDate
     @Column(name = "createdAt")
     LocalDateTime createdAt;
