@@ -40,4 +40,16 @@ public class TicketServiceImpl implements TicketService {
                 .build();
         return ticketRepository.save(ticket);
     }
+
+
+
+    public List<Ticket> getTicketByPhone(String phone) {
+        List<Ticket> tickets = ticketRepository.findTicketsByUserPhone(phone);
+
+
+       return tickets;
+
+    }
+
+
 }
