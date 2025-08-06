@@ -38,10 +38,10 @@ public class TicketController {
                 .build();
     }
 
-    @GetMapping("/get-ticket-by-phone")
-    public ApiResponse<List<Ticket>> getTicketByPhone(@RequestParam String phone) {
+    @GetMapping("/get-ticket-by-idUser")
+    public ApiResponse<List<Ticket>> getTicketByIdUser(@RequestParam int id) {
         return ApiResponse.<List<Ticket>>builder()
-                .result(ticketService.getTicketByPhone(phone))
+                .result(ticketService.getTicketByUserId(id))
                 .message("lấy danh sách vé thành công")
                 .build();
     }

@@ -29,6 +29,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
             "JOIN br.busStationFrom bsFrom " +
             "JOIN br.busStationTo bsTo " +
             "JOIN t.seatPosition sp " +
-            "WHERE u.phone = :phone")
-    List<Ticket> findTicketsByUserPhone(@Param("phone") String phone);
+            "WHERE u.id = :id")
+    List<Ticket> findTicketsByUserId(@Param("id") int id);
+
+
 }
