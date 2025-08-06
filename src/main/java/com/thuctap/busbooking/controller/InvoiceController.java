@@ -52,9 +52,9 @@ public class InvoiceController {
     }
 
     @GetMapping("/get-invoice-by-userid")
-    public ApiResponse<List<Invoice>> getInvoiceByUserId(@RequestParam String phone) {
+    public ApiResponse<List<Invoice>> getInvoiceByUserId(@RequestParam int id) {
         return ApiResponse.<List<Invoice>>builder()
-                .result(invoiceService.getInvoiceByUserId(phone))
+                .result(invoiceService.getInvoiceByUserId(id))
                 .message("Lấy danh sách hóa đơn thành công")
                 .build();
     }

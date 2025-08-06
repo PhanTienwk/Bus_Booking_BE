@@ -80,10 +80,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     ;
 
 
-    public List<Invoice> getInvoiceByUserId(String phone) {
-        User user = userRepository.findByPhone(phone);
+    public List<Invoice> getInvoiceByUserId(int id) {
+        User user = userRepository.findById(id).orElseThrow(null);
         if (user == null) {
-            log.warn("Không tìm thấy người dùng với số điện thoại: {}", phone);
+            log.warn("Không tìm thấy người dùng với id user: {}", id);
             return List.of();
         }
         return invoiceRepository.findByUserId(user.getId());

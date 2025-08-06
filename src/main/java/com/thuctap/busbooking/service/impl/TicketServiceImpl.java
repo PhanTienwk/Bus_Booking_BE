@@ -43,8 +43,8 @@ public class TicketServiceImpl implements TicketService {
 
 
 
-    public List<Ticket> getTicketByPhone(String phone) {
-        List<Ticket> tickets = ticketRepository.findTicketsByUserPhone(phone);
+    public List<Ticket> getTicketByUserId(int id) {
+        List<Ticket> tickets = ticketRepository.findTicketsByUserId(id);
 
 
        return tickets;
