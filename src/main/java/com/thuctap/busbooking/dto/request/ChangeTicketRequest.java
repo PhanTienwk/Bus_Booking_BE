@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class ChangeTicketRequest {
     int ticketId;
     int busTripId;
-    int seatPosition;
+    String seatPosition;
     int price;
 }

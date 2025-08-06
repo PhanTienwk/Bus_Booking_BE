@@ -215,8 +215,8 @@ public class BusTripServiceImpl implements BusTripService {
             List<SeatPosition> seatPositionList = seatPositionRepository.findByBusId(busTrip.getBus().getId());
             for(SeatPosition seatPosition : seatPositionList){
                 if(ticketRepository.existsBySeatPositionIdAndBusTripId(seatPosition.getId(),busTrip.getId())){
-                    Ticket ticket = ticketRepository.findBySeatPositionIdAndBusTripId(seatPosition.getId(),busTrip.getId());
-                    if(ticket.getStatus()==0 || ticket.getStatus()==4 ) busTripList.add(seatPosition);
+                    Ticket ticket = ticketRepository.findTop1BySeatPositionIdAndBusTripIdOrderByIdDesc(seatPosition.getId(),busTrip.getId());
+                    if(ticket.getStatus()==0 ) busTripList.add(seatPosition);
                 }else busTripList.add(seatPosition);
             }
             if(busTripList!=null){

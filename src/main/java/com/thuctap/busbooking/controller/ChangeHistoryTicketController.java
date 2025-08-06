@@ -6,9 +6,7 @@ import com.thuctap.busbooking.entity.ChangeHistoryTicket;
 import com.thuctap.busbooking.repository.BusTripRepository;
 import com.thuctap.busbooking.repository.SeatPositionRepository;
 import com.thuctap.busbooking.service.auth.ChangeHistoryTicketService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +20,26 @@ import lombok.extern.slf4j.Slf4j;
 public class ChangeHistoryTicketController {
 
     ChangeHistoryTicketService changeHistoryTicketService;
-    @PostMapping("/createTicket")
-    ApiResponse createChangeTicket(@RequestBody ChangeTicketRequest request){
-        changeHistoryTicketService.createChangeTicket(request);
-        return ApiResponse.builder()
-                .message("Successfully!")
-                .build();
+    @PutMapping("/tickets/{ticketId}/change")
+    public ApiResponse changeTicket(@PathVariable int ticketId, @RequestBody ChangeTicketRequest request) {
+        if (ticketId != request.getTicketId()) {
+            return ApiResponse.builder()
+                    .code(400)
+                    .message("Mã vé không khớp!")
+                    .build();
+        }
+        try {
+            ChangeHistoryTicket changeHistory = changeHistoryTicketService.createChangeTicket(request);
+            return ApiResponse.builder()
+                    .message("Đổi vé thành công!")
+                    .result(changeHistory)
+                    .build();
+        } catch (Exception e) {
+            log.error("Lỗi khi đổi vé: ", e);
+            return ApiResponse.builder()
+                    .code(500)
+                    .message("Lỗi server khi đổi vé!")
+                    .build();
+        }
     }
 }
