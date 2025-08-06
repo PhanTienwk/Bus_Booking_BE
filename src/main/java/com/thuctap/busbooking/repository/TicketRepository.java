@@ -1,6 +1,8 @@
 package com.thuctap.busbooking.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.thuctap.busbooking.entity.Ticket;
@@ -17,4 +19,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     Ticket findById(int integer);
 
     List<Ticket> findByInvoiceIdIn(List<Integer> invoiceIds);
+
+
+    @Query("SELECT t FROM Ticket t " +
+            "JOIN t.invoice i " +
+            "JOIN i.user u " +
+            "JOIN i.busTrip bt " +
+            "JOIN bt.busRoute br " +
+            "JOIN br.busStationFrom bsFrom " +
+            "JOIN br.busStationTo bsTo " +
+            "JOIN t.seatPosition sp " +
+            "WHERE u.phone = :phone")
+    List<Ticket> findTicketsByUserPhone(@Param("phone") String phone);
 }
