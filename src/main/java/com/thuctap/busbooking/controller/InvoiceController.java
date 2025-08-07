@@ -5,6 +5,7 @@ import com.cloudinary.Api;
 import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.ExpireInvoiceRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
+import com.thuctap.busbooking.dto.request.InvoiceUpdateRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.entity.Ticket;
@@ -64,6 +65,15 @@ public class InvoiceController {
         return ApiResponse.<List<Ticket>>builder()
                 .result(ticketService.getAllTicketsID(id))
                 .build();
+    }
+
+    @PutMapping("/invoices/{id}")
+    public ApiResponse<?> updateInvoice(@PathVariable int id, @RequestBody InvoiceUpdateRequest request) {
+            Invoice updatedInvoice = invoiceService.updateInvoice(id, request);
+            return ApiResponse.builder()
+                    .result("Cập nhật hóa đơn thành công")
+                    .build();
+
     }
 
 

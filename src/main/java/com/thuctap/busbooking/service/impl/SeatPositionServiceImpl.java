@@ -34,8 +34,8 @@ public class SeatPositionServiceImpl implements SeatPositionService {
         for(SeatPosition seatPosition : seatPositionList){
             if(ticketRepository.existsBySeatPositionIdAndBusTripId(seatPosition.getId(),busTrip.getId())){
                 System.out.println(seatPosition.getId()+"-"+busTrip.getId());
-                Ticket ticket = ticketRepository.findBySeatPositionIdAndBusTripId(seatPosition.getId(),busTrip.getId());
-                if(ticket.getStatus()==1 || ticket.getStatus()==2 || ticket.getStatus()==3) seatPosition.setStatus(false);
+                Ticket ticket = ticketRepository.findTop1BySeatPositionIdAndBusTripIdOrderByIdDesc(seatPosition.getId(),busTrip.getId());
+                if(ticket.getStatus()==1 || ticket.getStatus()==2 || ticket.getStatus()==3 || ticket.getStatus()==4) seatPosition.setStatus(false);
             }
         }
         return seatPositionList;

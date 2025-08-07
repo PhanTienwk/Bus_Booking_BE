@@ -8,9 +8,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangeTicketRequest {
-    int ticketId;
-    int busTripId;
-    String seatPosition;
-    int price;
+public class InvoiceUpdateRequest {
+    String name;
+    String phone;
+    String email;
+    int status;
 }

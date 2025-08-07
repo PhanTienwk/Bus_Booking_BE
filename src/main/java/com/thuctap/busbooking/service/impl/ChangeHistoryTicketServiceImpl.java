@@ -37,17 +37,17 @@ public class ChangeHistoryTicketServiceImpl implements ChangeHistoryTicketServic
     public ChangeHistoryTicket createChangeTicket(ChangeTicketRequest request) {
         Ticket ticket = ticketRepository.findById(request.getTicketId());
         BusTrip busTrip = busTripRepository.findById(request.getBusTripId());
-        SeatPosition seatPositionChange = seatPositionRepository.findById(request.getSeatPosition());
+        BusTrip busTrip1 = ticket.getBusTrip();
+        System.out.println(request.getSeatPosition()+"-"+request.getBusTripId());
+        SeatPosition seatPositionChange = seatPositionRepository.findByNameAndBusId(request.getSeatPosition(),busTrip.getBus().getId());
         SeatPosition seatPosition = ticket.getSeatPosition();
-        ticket.setStatus(2);
+        ticket.setStatus(4);
+        ticket.setSeatPosition(seatPositionChange);
+        ticket.setBusTrip(busTrip);
         ticketRepository.save(ticket);
-        seatPosition.setStatus(true);
-        seatPositionChange.setStatus(false);
-        seatPositionRepository.save(seatPosition);
-        seatPositionRepository.save(seatPositionChange);
         return changeHistoryTicketRepository.save(ChangeHistoryTicket.builder()
-                        .busTrip(busTrip)
-                        .seatPosition(seatPositionChange)
+                        .busTrip(busTrip1)
+                        .seatPosition(seatPosition)
                         .ticket(ticket)
                         .changeTime(LocalDateTime.now())
                 .build());
