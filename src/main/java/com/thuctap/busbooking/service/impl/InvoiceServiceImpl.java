@@ -2,6 +2,7 @@ package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
+import com.thuctap.busbooking.dto.request.InvoiceUpdateRequest;
 import com.thuctap.busbooking.entity.*;
 import com.thuctap.busbooking.exception.AppException;
 import com.thuctap.busbooking.exception.ErrorCode;
@@ -75,6 +76,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public Invoice getInvoiceId(int id) {
         return invoiceRepository.findById(id);
+    }
+
+    public Invoice updateInvoice(int id, InvoiceUpdateRequest request) {
+        Invoice invoice = invoiceRepository.findById(id);
+        invoice.setName(request.getName());
+        invoice.setPhone(request.getPhone());
+        invoice.setEmail(request.getEmail());
+        invoice.setStatus(request.getStatus());
+        invoice.setUpdatedAt(LocalDateTime.now());
+
+        return invoiceRepository.save(invoice);
     }
 
     ;
