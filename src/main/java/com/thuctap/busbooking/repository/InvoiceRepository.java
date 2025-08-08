@@ -5,6 +5,7 @@ import com.thuctap.busbooking.dto.response.MonthlyRevenueResponse;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
+public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaSpecificationExecutor<Invoice> {
     @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.status = :status")
     Float sumTotalAmountByStatus(@Param("status") int status);
 

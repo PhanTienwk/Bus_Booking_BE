@@ -2,6 +2,7 @@ package com.thuctap.busbooking.service.auth;
 
 import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
+import com.thuctap.busbooking.dto.request.InvoiceFilterRequest;
 import com.thuctap.busbooking.dto.request.InvoiceUpdateRequest;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.entity.Ticket;
@@ -19,5 +20,6 @@ public interface InvoiceService {
     public Boolean addBankDetail(BankDetailRequest bankDetailRequest);
 
     void updateInvoiceStatus(Integer invoiceId, int status);
+    List<Invoice> filterInvoices(InvoiceFilterRequest filter);
 
 }
