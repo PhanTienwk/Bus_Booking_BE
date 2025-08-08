@@ -1,7 +1,9 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.SpecificationQuery.FilterInvoice;
 import com.thuctap.busbooking.dto.request.BankDetailRequest;
 import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
+import com.thuctap.busbooking.dto.request.InvoiceFilterRequest;
 import com.thuctap.busbooking.dto.request.InvoiceUpdateRequest;
 import com.thuctap.busbooking.entity.*;
 import com.thuctap.busbooking.exception.AppException;
@@ -140,6 +142,15 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setStatus(status);
         invoiceRepository.save(invoice);
 
+    }
+
+    public List<Invoice> filterInvoices(InvoiceFilterRequest filter) {
+        return invoiceRepository.findAll(FilterInvoice.filterInvoice(
+                filter.getName(),
+                filter.getPhone(),
+                filter.getEmail(),
+                filter.getStatus()
+        ));
     }
 
 }

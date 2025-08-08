@@ -2,10 +2,7 @@ package com.thuctap.busbooking.controller;
 
 
 import com.cloudinary.Api;
-import com.thuctap.busbooking.dto.request.BankDetailRequest;
-import com.thuctap.busbooking.dto.request.ExpireInvoiceRequest;
-import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
-import com.thuctap.busbooking.dto.request.InvoiceUpdateRequest;
+import com.thuctap.busbooking.dto.request.*;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.entity.Ticket;
@@ -24,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,6 +72,15 @@ public class InvoiceController {
                     .result("Cập nhật hóa đơn thành công")
                     .build();
 
+    }
+
+    @PostMapping("/invoices/filter")
+    public ApiResponse<List<Invoice>> filterInvoices(@RequestBody InvoiceFilterRequest filter) {
+        List<Invoice> invoices = invoiceService.filterInvoices(filter);
+        return ApiResponse.<List<Invoice>>builder()
+                .message("Lọc danh sách invoice !")
+                .result(invoices)
+                .build();
     }
 
 
