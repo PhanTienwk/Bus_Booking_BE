@@ -1,10 +1,11 @@
 package com.thuctap.busbooking.controller;
 
-import com.thuctap.busbooking.dto.request.AccountCreationRequest;
-import com.thuctap.busbooking.dto.request.LoginRequest;
-import com.thuctap.busbooking.dto.request.RegisterRequest;
-import com.thuctap.busbooking.dto.request.VerifyRequest;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.thuctap.busbooking.dto.request.*;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.GoogleLoginResponse;
 import com.thuctap.busbooking.dto.response.JwtResponse;
 import com.thuctap.busbooking.entity.Account;
 import com.thuctap.busbooking.exception.ErrorCode;
@@ -16,6 +17,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,4 +67,14 @@ public class AuthController {
                 .message("Account created successfully!")
                 .build();
     }
+
+    @PostMapping("/auth/google")
+    public ApiResponse<GoogleLoginResponse> googleLogin( @RequestBody GoogleLoginRequest req) throws Exception {
+            GoogleLoginResponse resp = authService.loginWithGoogle(req);
+            System.out.println(resp.getEmail());
+            return ApiResponse.<GoogleLoginResponse>builder()
+                    .result(resp)
+                    .build();
+    }
+
 }
