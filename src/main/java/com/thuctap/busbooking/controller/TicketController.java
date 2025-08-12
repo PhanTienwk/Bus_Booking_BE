@@ -45,4 +45,13 @@ public class TicketController {
                 .message("lấy danh sách vé thành công")
                 .build();
     }
+
+    @PutMapping("/update-ticket-status")
+    public ApiResponse<Boolean> updateTicketStatus(@RequestParam Integer id, @RequestParam Integer status) {
+        return ApiResponse.<Boolean>builder()
+                .result(ticketService.updateTicketStatus(id, status))
+                .message("Cập nhật trạng thái bến xe thành công")
+                .build();
+    }
+
 }

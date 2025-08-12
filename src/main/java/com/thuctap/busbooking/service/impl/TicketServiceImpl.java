@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -49,6 +50,17 @@ public class TicketServiceImpl implements TicketService {
 
        return tickets;
 
+    }
+
+    public Boolean updateTicketStatus(Integer id, Integer status) {
+        Ticket ticket= ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy vé với id: " + id));
+
+
+
+        ticket.setStatus(status);
+        ticket.setUpdatedAt(LocalDateTime.now());
+        return ticketRepository.save(ticket) != null;
     }
 
 
