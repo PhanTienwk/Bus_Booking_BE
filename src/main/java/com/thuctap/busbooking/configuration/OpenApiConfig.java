@@ -14,7 +14,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class OpenApiConfig {
 
-    //    http://localhost:8080/bus/swagger-ui/index.html
+    //    http://localhost:8080/api/swagger-ui/index.html
     @Bean
     public OpenAPI openAPI(
             @Value("${open.api.title}") String title,
