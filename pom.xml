@@ -13,6 +13,7 @@
 	<name>identity-service</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Identity service</description>
+
 	<properties>
 		<java.version>21</java.version>
 		<projectlombok-lombok.version>1.18.30</projectlombok-lombok.version>
