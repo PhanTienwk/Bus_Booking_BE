@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
             Account account = accountRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
             String token = jwtUtil.generateToken(account.getEmail(), account.getRole().getName());
-            return new JwtResponse(token);
+            return new JwtResponse(token,account.getRole().getName());
         } catch (DisabledException e) {
             throw new RuntimeException("Account is disabled. Please contact support.");
         }

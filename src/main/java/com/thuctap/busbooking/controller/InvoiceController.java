@@ -123,4 +123,12 @@ public class InvoiceController {
 
                 .build();
     }
+
+//    @GetMapping("/get-bank-by-user-id")
+//    public ApiResponse<List<Invoice>> getInvoiceByUserId(@RequestParam int id) {
+//        return ApiResponse.<List<Invoice>>builder()
+//                .result(invoiceService.getInvoiceByUserId(id))
+//                .message("Lấy danh sách hóa đơn thành công")
+//                .build();
+//    }
 }
