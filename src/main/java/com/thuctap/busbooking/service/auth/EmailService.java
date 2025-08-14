@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface EmailService {
     void sendEmailTicket(BusTrip busTrip, List<Ticket> ticketList,String email) throws MessagingException;
+    void sendPasswordResetEmail(String email, String resetCode);
 }
