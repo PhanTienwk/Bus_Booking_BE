@@ -90,4 +90,53 @@ public class EmailServiceImpl implements EmailService {
         helper.setText(htmlContent, true);
         mailSender.send(mimeMessage);
     }
+
+
+    public void sendPasswordResetEmail(String email, String resetCode) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("Khôi Phục Mật Khẩu - BusBooking");
+
+            String htmlContent = "<!DOCTYPE html>"
+                    + "<html lang=\"vi\">"
+                    + "<head>"
+                    + "<meta charset=\"UTF-8\">"
+                    + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+                    + "<style>"
+                    + "body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }"
+                    + ".container { max-width: 600px; margin: 50px auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1); }"
+                    + ".header { background-color: #1a73e8; color: white; text-align: center; padding: 20px; }"
+                    + ".header img { max-width: 150px; }"
+                    + ".content { padding: 20px; text-align: center; }"
+                    + ".code { background-color: #e0f7fa; color: #00796b; font-size: 24px; font-weight: bold; padding: 10px 20px; border-radius: 5px; display: inline-block; margin: 20px 0; }"
+                    + ".footer { text-align: center; padding: 10px; color: #777; font-size: 12px; background-color: #f9f9f9; }"
+                    + "@media only screen and (max-width: 600px) { .container { margin: 10px; } }"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<div class=\"container\">"
+                    + "<div class=\"header\">"
+                    + "<h2>Khôi Phục Mật Khẩu</h2>"
+                    + "</div>"
+                    + "<div class=\"content\">"
+                    + "<p>Xin chào,</p>"
+                    + "<p>Chúng tôi nhận được yêu cầu khôi phục mật khẩu cho tài khoản BusBooking của bạn. Mật khẩu mới của bạn là:.</p>"
+                    + "<div class=\"code\">" + resetCode + "</div>"
+                    + "<p>Trân trọng,<br>Đội ngũ BusBooking</p>"
+                    + "</div>"
+                    + "<div class=\"footer\">"
+                    + "<p>&copy; " + java.time.Year.now().getValue() + " BusBooking. All rights reserved.</p>"
+                    + "</div>"
+                    + "</div>"
+                    + "</body>"
+                    + "</html>";
+
+            helper.setText(htmlContent, true); // true để bật chế độ HTML
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

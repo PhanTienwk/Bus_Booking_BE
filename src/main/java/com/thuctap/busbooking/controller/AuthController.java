@@ -77,4 +77,27 @@ public class AuthController {
                     .build();
     }
 
+    @PostMapping("/forgot-password")
+    public ApiResponse<?> forgotPassword(@RequestBody ForgotPasswordRequest request){
+        if (request.getEmail() == null || request.getEmail().isEmpty()) {
+            return ApiResponse.<String>builder()
+                    .code(101)
+                    .message("Email không được để trống")
+                    .build();
+        }
+        boolean result = authService.forgotPassword(request);
+        if(result){
+            return ApiResponse.<String>builder()
+                    .code(1000)
+                    .message("Email đặt lại mật khẩu đã được gửi")
+                    .build();
+        }else{
+            ApiResponse.<String>builder()
+                    .code(101)
+                    .message("Email không tồn tại hoặc có lỗi xảy ra")
+                    .build();
+        }
+        return ApiResponse.builder().code(101).build();
+    }
+
 }

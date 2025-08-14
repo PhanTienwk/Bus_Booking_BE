@@ -27,8 +27,8 @@ public enum ErrorCode {
     EMAIL_EXIST(1012,"Email already exists!",HttpStatus.BAD_REQUEST),
     PHOTO_UPLOAD_FAILED(1012,"Photo upload failed!",HttpStatus.BAD_REQUEST),
     TICKET_LIST_FAILED(1018,"Error when getting bus ticket list!",HttpStatus.BAD_REQUEST),
-    INVALID_GOOGLE_TOKEN(1010,"INVALID_GOOGLE_TOKEN",HttpStatus.BAD_REQUEST)
-
+    INVALID_GOOGLE_TOKEN(1010,"INVALID_GOOGLE_TOKEN",HttpStatus.BAD_REQUEST),
+    LOGIN_FAILED(1030,"Login Failed!",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

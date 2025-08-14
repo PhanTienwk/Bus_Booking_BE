@@ -4,6 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.thuctap.busbooking.dto.request.ForgotPasswordRequest;
 import com.thuctap.busbooking.dto.request.GoogleLoginRequest;
 import com.thuctap.busbooking.dto.request.LoginRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
@@ -19,6 +20,7 @@ import com.thuctap.busbooking.repository.RoleRepository;
 import com.thuctap.busbooking.repository.UserRepository;
 import com.thuctap.busbooking.security.jwt.JwtUtil;
 import com.thuctap.busbooking.service.auth.AuthService;
+import com.thuctap.busbooking.service.auth.EmailService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,16 +52,22 @@ public class AuthServiceImpl implements AuthService {
     PasswordEncoder passwordEncoder;
     UserRepository userRepository;
     RoleRepository roleRepository;
+    EmailService emailService;
     @NonFinal
     @Value("${google.client-id}")
     private String googleClientId;
 
     public JwtResponse login(LoginRequest loginRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             Account account = accountRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+            try {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            }catch (AuthenticationException ex){
+                throw new AppException(ErrorCode.LOGIN_FAILED);
+            }
+            if(account.getStatus()==0) throw new AppException(ErrorCode.LOGIN_FAILED);
             String token = jwtUtil.generateToken(account.getEmail(), account.getRole().getName());
             return new JwtResponse(token,account.getRole().getName());
         } catch (DisabledException e) {
@@ -120,6 +129,21 @@ public class AuthServiceImpl implements AuthService {
                 .role(account.getRole().getName())
                 .token(jwtToken)
                 .build();
+    }
+
+
+    @Transactional
+    public boolean forgotPassword(ForgotPasswordRequest request){
+        Optional<Account> accountOptional = accountRepository.findByEmail(request.getEmail());
+        if(accountOptional.isEmpty()){ return false;}
+        Account account = accountOptional.get();
+        User user = userRepository.findByAccount( account);
+        if(!user.getPhone().equals(request.getPhone())){ return false;}
+        int randomInt = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        account.setPassword(passwordEncoder.encode(String.valueOf(randomInt)));
+        accountRepository.save(account);
+        emailService.sendPasswordResetEmail(request.getEmail(), String.valueOf(randomInt));
+        return true;
     }
 
 }
