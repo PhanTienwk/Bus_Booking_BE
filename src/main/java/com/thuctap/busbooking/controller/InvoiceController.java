@@ -4,6 +4,8 @@ package com.thuctap.busbooking.controller;
 import com.cloudinary.Api;
 import com.thuctap.busbooking.dto.request.*;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.InvoiceConsultResponse;
+import com.thuctap.busbooking.dto.response.TicketConsultResponse;
 import com.thuctap.busbooking.entity.Invoice;
 import com.thuctap.busbooking.entity.Ticket;
 import com.thuctap.busbooking.entity.User;
@@ -114,13 +116,21 @@ public class InvoiceController {
     public ApiResponse markInvoiceAsExpired(@RequestBody ExpireInvoiceRequest request) {
         invoiceService.updateInvoiceStatus(request.getInvoiceId(), 0);
 
-        for (String seatName : request.getSelectedSeats()) {
-            seatPositionService.updateSeatPosition(seatName, request.getBusId(), true);
-        }
+        ticketService.updateTicketStatusByInvoiceId(request.getInvoiceId(), 0);
 
         return ApiResponse.builder()
                 .message("Cập nhật trạng thái hóa đơn hết hạn và ghế thành công")
 
+                .build();
+    }
+
+
+    @PostMapping("/consultInvoice")
+    ApiResponse<InvoiceConsultResponse> getInvoiceConsult(@RequestBody InvoiceConsultRequest request){
+        InvoiceConsultResponse invoiceConsultResponse = invoiceService.getInvoiceConsult(request);
+
+        return ApiResponse.<InvoiceConsultResponse>builder()
+                .result(invoiceConsultResponse)
                 .build();
     }
 

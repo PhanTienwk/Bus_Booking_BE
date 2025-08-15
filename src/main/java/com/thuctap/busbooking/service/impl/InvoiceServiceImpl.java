@@ -1,10 +1,9 @@
 package com.thuctap.busbooking.service.impl;
 
 import com.thuctap.busbooking.SpecificationQuery.FilterInvoice;
-import com.thuctap.busbooking.dto.request.BankDetailRequest;
-import com.thuctap.busbooking.dto.request.InvoiceCreationRequest;
-import com.thuctap.busbooking.dto.request.InvoiceFilterRequest;
-import com.thuctap.busbooking.dto.request.InvoiceUpdateRequest;
+import com.thuctap.busbooking.dto.request.*;
+import com.thuctap.busbooking.dto.response.InvoiceConsultResponse;
+import com.thuctap.busbooking.dto.response.TicketConsultResponse;
 import com.thuctap.busbooking.entity.*;
 import com.thuctap.busbooking.exception.AppException;
 import com.thuctap.busbooking.exception.ErrorCode;
@@ -25,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -151,6 +151,34 @@ public class InvoiceServiceImpl implements InvoiceService {
                 filter.getEmail(),
                 filter.getStatus()
         ));
+    }
+
+    public InvoiceConsultResponse getInvoiceConsult(InvoiceConsultRequest request) {
+        try {
+            Invoice invoice = invoiceRepository.findById(request.getInvoiceId());
+
+            if (invoice == null) {
+                throw new AppException(ErrorCode.INVOICE_NOT_FOUND);
+            }
+
+            return InvoiceConsultResponse.builder()
+                    .email(invoice.getEmail())
+                    .name(invoice.getName())
+                    .phone(invoice.getPhone())
+                    .payment_method(invoice.getPaymentMethod())
+                    .number_of_tickets(invoice.getNumberOfTickets())
+                    .total_amount(invoice.getTotalAmount())
+                    .nameStationFrom(invoice.getBusTrip().getBusRoute().getBusStationFrom().getName())
+                    .nameStationTo(invoice.getBusTrip().getBusRoute().getBusStationTo().getName())
+                    .departureTime(invoice.getBusTrip().getDepartureTime())
+                    .status(invoice.getStatus())
+                    .build();
+
+        } catch (AppException ex) {
+            throw new AppException(ErrorCode.INVOICE_NOT_FOUND);
+        } catch (Exception ex) {
+            throw new AppException(ErrorCode.INVOICE_NOT_FOUND);
+        }
     }
 
 }
