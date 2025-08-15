@@ -1,7 +1,10 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.TicketConsultRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.dto.response.TicketConsultResponse;
 import com.thuctap.busbooking.entity.Ticket;
+import com.thuctap.busbooking.exception.AppException;
 import com.thuctap.busbooking.exception.ErrorCode;
 import com.thuctap.busbooking.service.impl.TicketServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +55,20 @@ public class TicketController {
                 .result(ticketService.updateTicketStatus(id, status))
                 .message("Cập nhật trạng thái bến xe thành công")
                 .build();
+    }
+
+    @PostMapping("/consultTicket")
+    public ApiResponse<TicketConsultResponse> getTicketConsult(@RequestBody TicketConsultRequest request){
+        TicketConsultResponse ticketConsultResponse = ticketService.getTicketConsult(request);
+        if(ticketConsultResponse.getNameUser().isEmpty()){
+            return ApiResponse.<TicketConsultResponse>builder()
+                    .code(1031)
+                    .build();
+        }
+        return ApiResponse.<TicketConsultResponse>builder()
+                .result(ticketConsultResponse)
+                .build();
+
     }
 
 }
