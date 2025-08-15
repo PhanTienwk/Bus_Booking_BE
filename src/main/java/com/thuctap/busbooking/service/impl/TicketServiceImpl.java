@@ -63,5 +63,14 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.save(ticket) != null;
     }
 
+    @Override
+    public void updateTicketStatusByInvoiceId(Integer invoiceId, int status) {
+        List<Ticket> tickets = ticketRepository.findByInvoiceId(invoiceId);
+        for (Ticket ticket : tickets) {
+            ticket.setStatus(status);
+        }
+        ticketRepository.saveAll(tickets);
+    }
+
 
 }

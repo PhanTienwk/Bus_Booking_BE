@@ -114,9 +114,7 @@ public class InvoiceController {
     public ApiResponse markInvoiceAsExpired(@RequestBody ExpireInvoiceRequest request) {
         invoiceService.updateInvoiceStatus(request.getInvoiceId(), 0);
 
-        for (String seatName : request.getSelectedSeats()) {
-            seatPositionService.updateSeatPosition(seatName, request.getBusId(), true);
-        }
+        ticketService.updateTicketStatusByInvoiceId(request.getInvoiceId(), 0);
 
         return ApiResponse.builder()
                 .message("Cập nhật trạng thái hóa đơn hết hạn và ghế thành công")

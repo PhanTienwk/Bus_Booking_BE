@@ -12,4 +12,5 @@ public interface TicketService {
 
     public List<Ticket> getTicketByUserId(int id);
     public Boolean updateTicketStatus(Integer id, Integer status);
+    void updateTicketStatusByInvoiceId(Integer invoiceId, int status);
 }
