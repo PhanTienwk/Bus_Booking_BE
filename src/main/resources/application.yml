@@ -29,6 +29,11 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+google:
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
+
+
 jwt:
   signerKey: "t1trmjezOQeXQVCLe58ant1iLOnVdDhwR/CRrmevOI77vsOi5zzFDnMPaHLLm5/AdwJHjavnBBr2vQoBAv96Dg=="
   valid-duration: 3600 # in second
