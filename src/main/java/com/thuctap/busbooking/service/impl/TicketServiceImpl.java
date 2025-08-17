@@ -78,6 +78,7 @@ public class TicketServiceImpl implements TicketService {
         ticketRepository.saveAll(tickets);
     }
 
+
     public TicketConsultResponse getTicketConsult(TicketConsultRequest request) {
         try {
             Ticket ticket = ticketRepository.findById(request.getTicketId());
@@ -109,6 +110,7 @@ public class TicketServiceImpl implements TicketService {
             throw new AppException(ErrorCode.TICKET_NOT_FOUND);
         }
     }
+
 
 
 }
