@@ -1,8 +1,20 @@
 package com.thuctap.busbooking.service.impl;
 
+
 import com.thuctap.busbooking.SpecificationQuery.FilterProvince;
 import com.thuctap.busbooking.SpecificationQuery.FilterTicketCancel;
 import com.thuctap.busbooking.entity.*;
+
+import com.thuctap.busbooking.dto.request.TicketConsultRequest;
+import com.thuctap.busbooking.dto.response.InvoiceConsultResponse;
+import com.thuctap.busbooking.dto.response.TicketConsultResponse;
+import com.thuctap.busbooking.entity.BusTrip;
+import com.thuctap.busbooking.entity.Invoice;
+import com.thuctap.busbooking.entity.SeatPosition;
+import com.thuctap.busbooking.entity.Ticket;
+import com.thuctap.busbooking.exception.AppException;
+import com.thuctap.busbooking.exception.ErrorCode;
+
 import com.thuctap.busbooking.repository.TicketRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -14,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -85,6 +98,40 @@ public class TicketServiceImpl implements TicketService {
         Specification<Ticket> spec = FilterTicketCancel.filterTickets(name, phone, email, status, seatName, bankAccountNumber, minAmount, maxAmount, startTime, endTime);
         return ticketRepository.findAll(spec);
     }
+
+
+    public TicketConsultResponse getTicketConsult(TicketConsultRequest request) {
+        try {
+            Ticket ticket = ticketRepository.findById(request.getTicketId());
+
+            if (ticket == null || ticket.getInvoice() == null) {
+                throw new AppException(ErrorCode.TICKET_NOT_FOUND);
+            }
+
+            if (!Objects.equals(ticket.getInvoice().getPhone(), request.getPhone().trim())) {
+                throw new AppException(ErrorCode.TICKET_NOT_FOUND);
+            }
+
+
+
+
+            return TicketConsultResponse.builder()
+                    .nameSeatPosition(ticket.getSeatPosition().getName())
+                    .emailUser(ticket.getInvoice().getEmail())
+                    .nameUser(ticket.getInvoice().getName())
+                    .status(ticket.getStatus())
+                    .nameStationTo(ticket.getBusTrip().getBusRoute().getBusStationTo().getName())
+                    .nameStationFrom(ticket.getBusTrip().getBusRoute().getBusStationFrom().getName())
+                    .departureTime(ticket.getBusTrip().getDepartureTime())
+                    .build();
+
+        } catch (AppException ex) {
+            throw new AppException(ErrorCode.TICKET_NOT_FOUND);
+        } catch (Exception ex) {
+            throw new AppException(ErrorCode.TICKET_NOT_FOUND);
+        }
+    }
+
 
 
 }
