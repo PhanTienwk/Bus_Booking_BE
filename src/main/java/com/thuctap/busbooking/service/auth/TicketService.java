@@ -13,4 +13,14 @@ public interface TicketService {
     public List<Ticket> getTicketByUserId(int id);
     public Boolean updateTicketStatus(Integer id, Integer status);
     void updateTicketStatusByInvoiceId(Integer invoiceId, int status);
+    public List<Ticket> filterTicket(String name,
+                                     String phone,
+                                     String email,
+                                     Integer status,
+                                     String seatName,
+                                     String bankAccountNumber,
+                                     Double minAmount,
+                                     Double maxAmount,
+                                     String startTime,
+                                     String endTime);
 }

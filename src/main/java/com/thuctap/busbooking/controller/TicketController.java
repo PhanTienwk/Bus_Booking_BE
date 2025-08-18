@@ -1,5 +1,6 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.TicketCancelRequest;
 import com.thuctap.busbooking.dto.request.TicketConsultRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
 import com.thuctap.busbooking.dto.response.TicketConsultResponse;
@@ -57,18 +58,37 @@ public class TicketController {
                 .build();
     }
 
-    @PostMapping("/consultTicket")
-    public ApiResponse<TicketConsultResponse> getTicketConsult(@RequestBody TicketConsultRequest request){
-        TicketConsultResponse ticketConsultResponse = ticketService.getTicketConsult(request);
-        if(ticketConsultResponse.getNameUser().isEmpty()){
-            return ApiResponse.<TicketConsultResponse>builder()
-                    .code(1031)
-                    .build();
-        }
-        return ApiResponse.<TicketConsultResponse>builder()
-                .result(ticketConsultResponse)
-                .build();
+//    @PostMapping("/consultTicket")
+//    public ApiResponse<TicketConsultResponse> getTicketConsult(@RequestBody TicketConsultRequest request){
+//        TicketConsultResponse ticketConsultResponse = ticketService.getTicketConsult(request);
+//        if(ticketConsultResponse.getNameUser().isEmpty()){
+//            return ApiResponse.<TicketConsultResponse>builder()
+//                    .code(1031)
+//                    .build();
+//        }
+//        return ApiResponse.<TicketConsultResponse>builder()
+//                .result(ticketConsultResponse)
+//                .build();
+//
+//    }
 
+    @PostMapping("/filter-ticket-cancel")
+    public ApiResponse<List<Ticket>> filterTickets(@RequestBody TicketCancelRequest request) {
+        return ApiResponse.<List<Ticket>>builder()
+                .result(ticketService.filterTicket(
+                        request.getName(),
+                        request.getPhone(),
+                        request.getEmail(),
+                        request.getStatus(),
+                        request.getSeatName(),
+                        request.getBankAccountNumber(),
+                        request.getMinAmount(),
+                        request.getMaxAmount(),
+                        request.getStartTime(),
+                        request.getEndTime()
+                ))
+                .message("Lọc danh sách vé thành công")
+                .build();
     }
 
 }

@@ -1,7 +1,9 @@
 package com.thuctap.busbooking.controller;
 
+import com.thuctap.busbooking.dto.request.BusStationFilterRequest;
 import com.thuctap.busbooking.dto.request.ProvinceRequest;
 import com.thuctap.busbooking.dto.response.ApiResponse;
+import com.thuctap.busbooking.entity.BusStation;
 import com.thuctap.busbooking.entity.BusTrip;
 import com.thuctap.busbooking.entity.Province;
 import com.thuctap.busbooking.service.impl.BusTripServiceImpl;
@@ -119,5 +121,17 @@ public class ProvinceController {
                     .message("Lỗi khi cập nhật trạng thái tỉnh/thành phố: " + e.getMessage())
                     .build();
         }
+    }
+
+    @PostMapping("/filter-province")
+    public ApiResponse<List<Province>> filterBusStations(@RequestBody ProvinceRequest request) {
+        return ApiResponse.<List<Province>>builder()
+                .result(provinceService.filterProvince(
+                        request.getId(),
+                        request.getName(),
+                        request.getStatus()
+                ))
+                .message("Lọc danh sách tỉnh thành công")
+                .build();
     }
 }

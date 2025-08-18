@@ -1,5 +1,7 @@
 package com.thuctap.busbooking.service.impl;
 
+import com.thuctap.busbooking.SpecificationQuery.FilterBusStation;
+import com.thuctap.busbooking.SpecificationQuery.FilterProvince;
 import com.thuctap.busbooking.dto.request.ProvinceRequest;
 import com.thuctap.busbooking.entity.Province;
 import com.thuctap.busbooking.entity.Ticket;
@@ -9,6 +11,7 @@ import com.thuctap.busbooking.entity.BusStation;
 import com.thuctap.busbooking.entity.Province;
 import com.thuctap.busbooking.repository.BusStationRepository;
 import com.thuctap.busbooking.repository.ProvinceRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.thuctap.busbooking.service.auth.ProvinceService;
@@ -76,5 +79,10 @@ public class ProvinceServiceImpl implements ProvinceService {
         dto.setName(province.getName());
         dto.setStatus(province.getStatus());
         return dto;
+    }
+
+    public List<Province> filterProvince(Integer id, String name,  Integer status) {
+        Specification<Province> spec = FilterProvince.filterProvince(id, name, status);
+        return provinceRepository.findAll(spec);
     }
 }
