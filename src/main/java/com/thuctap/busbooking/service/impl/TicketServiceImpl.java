@@ -1,5 +1,10 @@
 package com.thuctap.busbooking.service.impl;
 
+
+import com.thuctap.busbooking.SpecificationQuery.FilterProvince;
+import com.thuctap.busbooking.SpecificationQuery.FilterTicketCancel;
+import com.thuctap.busbooking.entity.*;
+
 import com.thuctap.busbooking.dto.request.TicketConsultRequest;
 import com.thuctap.busbooking.dto.response.InvoiceConsultResponse;
 import com.thuctap.busbooking.dto.response.TicketConsultResponse;
@@ -9,7 +14,9 @@ import com.thuctap.busbooking.entity.SeatPosition;
 import com.thuctap.busbooking.entity.Ticket;
 import com.thuctap.busbooking.exception.AppException;
 import com.thuctap.busbooking.exception.ErrorCode;
+
 import com.thuctap.busbooking.repository.TicketRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.thuctap.busbooking.service.auth.TicketService;
 import lombok.AccessLevel;
@@ -76,6 +83,20 @@ public class TicketServiceImpl implements TicketService {
             ticket.setStatus(status);
         }
         ticketRepository.saveAll(tickets);
+    }
+
+    public List<Ticket> filterTicket(String name,
+                                       String phone,
+                                       String email,
+                                       Integer status,
+                                       String seatName,
+                                       String bankAccountNumber,
+                                       Double minAmount,
+                                       Double maxAmount,
+                                       String startTime,
+                                       String endTime) {
+        Specification<Ticket> spec = FilterTicketCancel.filterTickets(name, phone, email, status, seatName, bankAccountNumber, minAmount, maxAmount, startTime, endTime);
+        return ticketRepository.findAll(spec);
     }
 
 

@@ -16,6 +16,19 @@ public interface TicketService {
     public Boolean updateTicketStatus(Integer id, Integer status);
     void updateTicketStatusByInvoiceId(Integer invoiceId, int status);
 
+    public List<Ticket> filterTicket(String name,
+                                     String phone,
+                                     String email,
+                                     Integer status,
+                                     String seatName,
+                                     String bankAccountNumber,
+                                     Double minAmount,
+                                     Double maxAmount,
+                                     String startTime,
+                                     String endTime);
+
+
     public TicketConsultResponse getTicketConsult(TicketConsultRequest request);
+
 
 }
