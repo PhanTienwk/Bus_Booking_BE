@@ -22,7 +22,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaS
     Float sumTotalAmountByStatus(@Param("status") int status);
 
     Invoice findById(int integer);
-
+    List<Invoice> findAllByOrderByIdDesc();
     @Query("SELECT SUM(i.totalAmount) FROM Invoice i WHERE i.busTrip.departureTime BETWEEN :start AND :end AND i.status = 3")
     Float sumTotalAmountByTripDepartureTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
