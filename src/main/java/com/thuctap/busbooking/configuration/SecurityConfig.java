@@ -40,7 +40,8 @@ public class SecurityConfig {
     }
 
     private final String[] PUBLIC_ENDPOINTS = {
-        "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh"
+            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/reset-pass","/login","/register","/verify","/create-account","/auth/google","/forgot-password"
     };
 
     @Bean
@@ -50,14 +51,27 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
 
 //                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-                .anyRequest()
+                        .anyRequest()
 //                .authenticated()
-                .permitAll());
+                        .permitAll());
 
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
+//        httpSecurity
+//                .cors(Customizer.withDefaults())
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(request -> request
+//                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
+//                        UsernamePasswordAuthenticationFilter.class);
+//
+//        return httpSecurity.build();
+
 
     }
 

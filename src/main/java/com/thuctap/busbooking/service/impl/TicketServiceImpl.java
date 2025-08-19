@@ -1,10 +1,6 @@
 package com.thuctap.busbooking.service.impl;
 
-
-import com.thuctap.busbooking.SpecificationQuery.FilterProvince;
 import com.thuctap.busbooking.SpecificationQuery.FilterTicketCancel;
-import com.thuctap.busbooking.entity.*;
-
 import com.thuctap.busbooking.dto.request.TicketConsultRequest;
 import com.thuctap.busbooking.dto.response.InvoiceConsultResponse;
 import com.thuctap.busbooking.dto.response.TicketConsultResponse;
@@ -14,7 +10,6 @@ import com.thuctap.busbooking.entity.SeatPosition;
 import com.thuctap.busbooking.entity.Ticket;
 import com.thuctap.busbooking.exception.AppException;
 import com.thuctap.busbooking.exception.ErrorCode;
-
 import com.thuctap.busbooking.repository.TicketRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -61,7 +56,7 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> tickets = ticketRepository.findTicketsByUserId(id);
 
 
-       return tickets;
+        return tickets;
 
     }
 
@@ -86,19 +81,18 @@ public class TicketServiceImpl implements TicketService {
     }
 
     public List<Ticket> filterTicket(String name,
-                                       String phone,
-                                       String email,
-                                       Integer status,
-                                       String seatName,
-                                       String bankAccountNumber,
-                                       Double minAmount,
-                                       Double maxAmount,
-                                       String startTime,
-                                       String endTime) {
+                                     String phone,
+                                     String email,
+                                     Integer status,
+                                     String seatName,
+                                     String bankAccountNumber,
+                                     Double minAmount,
+                                     Double maxAmount,
+                                     String startTime,
+                                     String endTime) {
         Specification<Ticket> spec = FilterTicketCancel.filterTickets(name, phone, email, status, seatName, bankAccountNumber, minAmount, maxAmount, startTime, endTime);
         return ticketRepository.findAll(spec);
     }
-
 
     public TicketConsultResponse getTicketConsult(TicketConsultRequest request) {
         try {
@@ -112,14 +106,15 @@ public class TicketServiceImpl implements TicketService {
                 throw new AppException(ErrorCode.TICKET_NOT_FOUND);
             }
 
-
+            int status = 0;
+            if(ticket.getInvoice().getStatus()==2 && (ticket.getStatus()==1 || ticket.getStatus()==3))status=1;
 
 
             return TicketConsultResponse.builder()
                     .nameSeatPosition(ticket.getSeatPosition().getName())
                     .emailUser(ticket.getInvoice().getEmail())
                     .nameUser(ticket.getInvoice().getName())
-                    .status(ticket.getStatus())
+                    .status(status)
                     .nameStationTo(ticket.getBusTrip().getBusRoute().getBusStationTo().getName())
                     .nameStationFrom(ticket.getBusTrip().getBusRoute().getBusStationFrom().getName())
                     .departureTime(ticket.getBusTrip().getDepartureTime())
@@ -131,7 +126,6 @@ public class TicketServiceImpl implements TicketService {
             throw new AppException(ErrorCode.TICKET_NOT_FOUND);
         }
     }
-
 
 
 }
