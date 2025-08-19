@@ -54,4 +54,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaS
     List<Invoice> findByBusTripId(Integer tripId);
 
     List<Invoice> findByUserId(Integer id);
+
+    List<Invoice> findByUserIdOrderByIdDesc(int id);
 }

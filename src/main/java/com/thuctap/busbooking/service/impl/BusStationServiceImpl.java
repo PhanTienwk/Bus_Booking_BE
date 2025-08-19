@@ -29,7 +29,7 @@ public class BusStationServiceImpl implements BusStationService {
     BusStationRepository BusSTTRepo;
     ProvinceRepository ProvinceRepo;
     public List<BusStation> getAllBusSTT() {
-        return BusSTTRepo.findAll();
+        return BusSTTRepo.findAllByOrderByIdDesc();
     }
 
 
