@@ -100,7 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             log.warn("Không tìm thấy người dùng với id user: {}", id);
             return List.of();
         }
-        return invoiceRepository.findByUserId(user.getId());
+        return invoiceRepository.findByUserIdOrderByIdDesc(user.getId());
     }
 
 

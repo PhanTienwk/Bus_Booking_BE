@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,19 +60,19 @@ public class TicketController {
                 .build();
     }
 
-//    @PostMapping("/consultTicket")
-//    public ApiResponse<TicketConsultResponse> getTicketConsult(@RequestBody TicketConsultRequest request){
-//        TicketConsultResponse ticketConsultResponse = ticketService.getTicketConsult(request);
-//        if(ticketConsultResponse.getNameUser().isEmpty()){
-//            return ApiResponse.<TicketConsultResponse>builder()
-//                    .code(1031)
-//                    .build();
-//        }
-//        return ApiResponse.<TicketConsultResponse>builder()
-//                .result(ticketConsultResponse)
-//                .build();
-//
-//    }
+    @PostMapping("/consultTicket")
+    public ApiResponse<TicketConsultResponse> getTicketConsult(@RequestBody TicketConsultRequest request){
+        TicketConsultResponse ticketConsultResponse = ticketService.getTicketConsult(request);
+        if(ticketConsultResponse.getNameUser().isEmpty()){
+            return ApiResponse.<TicketConsultResponse>builder()
+                    .code(1031)
+                    .build();
+        }
+        return ApiResponse.<TicketConsultResponse>builder()
+                .result(ticketConsultResponse)
+                .build();
+
+    }
 
     @PostMapping("/filter-ticket-cancel")
     public ApiResponse<List<Ticket>> filterTickets(@RequestBody TicketCancelRequest request) {
